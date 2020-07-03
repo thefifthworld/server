@@ -8,6 +8,10 @@ const router = express.Router()
 
 server.use('/', router)
 
+router.get('/login', async (req, res) => {
+  res.render('login')
+})
+
 router.get('/', async (req, res) => {
   res.render('home')
 })
