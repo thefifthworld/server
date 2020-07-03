@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>The Fifth World: Login</title>
+    <link rel="icon" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/favicon.svg" />
+    <link rel=”mask-icon” href=”https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/favicon.svg” color=”#000000" />
+    <link rel="apple-touch-icon" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/apple-touch-icon.png" />
+    <link rel="stylesheet" media="all" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/v/1/0/0/style.css" crossorigin="" />
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content="A design system for the Fifth World." />
+  </head>
+  <body class="thefifthworld">
+    <header>
+      <nav class="personal">
+        <ul>
+          <li><a href="standard-loggedin.html">Log in</a></li>
+          <li><a href="#">How to Join</a></li>
+        </ul>
+      </nav>
+      <h1 class="logo">
+        <a href="/">
+          <img src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/wordmark.black.svg" alt="The Fifth World" />
+        </a>
+      </h1>
+    </header>
+    <main>
+      <section class="login">
+        <form action="/login" method="post">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" placeholder="you@example.com" />
+          <label for="passphrase">Passphrase</label>
+          <input type="text" name="passphrase" id="passphrase" placeholder="Whisper your secret passphrase" />
+          <p class="buttons">
+            <button>Log in</button>
+          </p>
+          <p class="note">
+            <a href="/forgot-passphrase">Forgot your passphrase?</a>
+          </p>
+        </form>
+        <div class="oauth2-login">
+          <p>Or login with&hellip;</p>
+          <ul>
+            <li><a href="/login/patreon" class="button patreon">Patreon</a></li>
+            <li><a href="/login/discord" class="button discord">Discord</a></li>
+            <li><a href="/login/google" class="button google">Google</a></li>
+            <li><a href="/login/facebook" class="button facebook">Facebook</a></li>
+            <li><a href="/login/twitter" class="button twitter">Twitter</a></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+    <nav class="site">
+      <ul>
+        <li class="explore"><a href="/explore">Explore</a></li>
+        <li class="hear"><a href="/stories">Hear</a></li>
+        <li class="see"><a href="/art">See</a></li>
+        <li class="play"><a href="/play">Play</a></li>
+      </ul>
+    </nav>
+    <footer>
+      <p><em>The Fifth World</em> exists thanks to the generosity of our supporters, partners, and friends on Patreon. <a href="https://www.patreon.com/thefifthworld">Would you like to join them and become part of our growing community?</a></p>
+      <p class="copyleft">
+        <span class="icons">
+          <img src="https://s3.amazonaws.com/thefifthworld/website/images/cc.svg" alt="Creative Commons" />
+          <img src="https://s3.amazonaws.com/thefifthworld/website/images/by.svg" alt="Attribution" />
+          <img src="https://s3.amazonaws.com/thefifthworld/website/images/sa.svg" alt="Share-Alike" />
+        </span>
+        <em>The Fifth World</em> is licensed under a <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+      </p>
+    </footer>
+    <script src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/v/1/0/0/bundle.js"></script>
+  </body>
+</html>
