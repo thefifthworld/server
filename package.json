@@ -1,0 +1,54 @@
+{
+  "name": "@thefifthworld/server",
+  "description": "The Fifth World Server",
+  "version": "1.0.0",
+  "license": "CC-BY-SA-4.0",
+  "homepage": "https://api.thefifthworld.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thefifthworld/server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thefifthworld/server/issues"
+  },
+  "author": {
+    "name": "The Fifth World",
+    "email": "dev@thefifthworld.com",
+    "url": "https://thefifthworld.com"
+  },
+  "contributors": [
+    {
+      "name": "Jason Godesky",
+      "email": "jason@thefifthworld.com"
+    }
+  ],
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.3.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.1.0"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "npm-run-all lint test serve",
+    "serve": "node index.js",
+    "test": "jest --detectOpenHandles",
+    "lint": "eslint './*.js'"
+  },
+  "eslintConfig": {
+    "extends": [
+      "standard"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 8
+    }
+  }
+}
