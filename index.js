@@ -1,16 +1,14 @@
-const config = require('./config')
-
 const express = require('express')
+
+const config = require('./config')
+const login = require('./routes/login')
 
 const server = express()
 server.set('view engine', 'ejs')
 const router = express.Router()
 
+server.use('/', login)
 server.use('/', router)
-
-router.get('/login', async (req, res) => {
-  res.render('login')
-})
 
 router.get('/', async (req, res) => {
   res.render('home')
