@@ -1,14 +1,14 @@
 const express = require('express')
 
 const config = require('./config')
-const public = require('./routes/public')
+const pub = require('./routes/public')
 const login = require('./routes/login')
 
 const server = express()
 server.set('view engine', 'ejs')
 
 server.use('/', login)
-server.use('/', public)
+server.use('/', pub)
 
 const { port } = config
 server.listen(port, () => {

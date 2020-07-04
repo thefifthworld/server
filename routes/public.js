@@ -1,9 +1,9 @@
 const express = require('express')
-const public = express.Router()
+const pub = express.Router()
 
 // GET /
-public.get('/', async (req, res) => {
+pub.get('/', async (req, res) => {
   res.render('home')
 })
 
-module.exports = public
+module.exports = pub
