@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser')
 const passport = require('passport')
 
 const config = require('./config')
-const auth = require('./auth')
+const { initializePassport } = require('./auth')
 const pub = require('./routes/public')
 const login = require('./routes/login')
 
@@ -17,7 +17,7 @@ server.use(cookieParser())
 // Set up Passport
 server.use(passport.initialize())
 server.use(passport.session())
-auth(passport)
+initializePassport(passport)
 
 server.use('/', login)
 server.use('/', pub)

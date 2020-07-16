@@ -1,4 +1,5 @@
 const axios = require('axios')
+const jsonwebtoken = require('jsonwebtoken')
 const LocalStrategy = require('passport-local').Strategy
 const config = require('./config')
 
@@ -7,7 +8,7 @@ const config = require('./config')
  * @param passport {Passport} - A Passport.js instance.
  */
 
-const auth = passport => {
+const initializePassport = passport => {
   passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'passphrase',
@@ -26,4 +27,26 @@ const auth = passport => {
   }))
 }
 
-module.exports = auth
+/**
+ * Express.js middleware that tests if the user is logged in. If she isn't,
+ * redirect her to /login.
+ * @param req {Object} - The Express.js request object.
+ * @param res {Object} - The Express.js response object.
+ * @param next {function} - The next middleware to call.
+ */
+
+const isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
+    console.log(token)
+    if (token && token.id) {
+      next()
+    }
+  }
+  res.redirect('/login')
+}
+
+module.exports = {
+  initializePassport,
+  isLoggedIn
+}
