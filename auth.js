@@ -39,10 +39,10 @@ const isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
     if (token && token.id) {
-      next()
+      return next()
     }
   }
-  res.redirect('/login')
+  return res.redirect('/login')
 }
 
 /**
@@ -57,10 +57,10 @@ const isAdmin = async (req, res, next) => {
   if (req.cookies.jwt) {
     const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
     if (token && token.id && token.admin) {
-      next()
+      return next()
     }
   }
-  res.redirect('/login')
+  return res.redirect('/login')
 }
 
 module.exports = {
