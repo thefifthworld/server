@@ -23,4 +23,10 @@ login.get('/login-route', isLoggedIn, async (req, res) => {
   res.sendStatus(200)
 })
 
+// GET /logout
+login.get('/logout', async (req, res) => {
+  res.cookie('jwt', '', { maxAge: 0 })
+  res.redirect('/login')
+})
+
 module.exports = login
