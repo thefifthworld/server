@@ -38,6 +38,7 @@ const initializePassport = passport => {
 const isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
+    req.user = token
     if (token && token.id) {
       return next()
     }
@@ -56,6 +57,7 @@ const isLoggedIn = async (req, res, next) => {
 const isAdmin = async (req, res, next) => {
   if (req.cookies.jwt) {
     const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
+    req.user = token
     if (token && token.id && token.admin) {
       return next()
     }
