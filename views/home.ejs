@@ -1,25 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>The Fifth World</title>
-    <link rel="icon" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/favicon.svg" />
-    <link rel=”mask-icon” href=”https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/favicon.svg” color=”#000000" />
-    <link rel="apple-touch-icon" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/apple-touch-icon.png" />
-    <link rel="stylesheet" media="all" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/v/1/0/0/style.css" crossorigin="" />
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta name="description" content="A design system for the Fifth World." />
-  </head>
+  <%- include('includes/head', { meta }) %>
   <body class="thefifthworld stack">
     <header class="home">
-      <nav class="personal">
-        <ul>
-          <li><a href="/login">Log in</a></li>
-          <li><a href="/about/membership">How to Join</a></li>
-        </ul>
-      </nav>
+      <%- include('includes/personal-nav', { member }) %>
       <h1 class="logo">
         <a href="/">
           <img src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/wordmark.white.svg" alt="The Fifth World" />
@@ -66,25 +50,6 @@
         </div>
       </form>
     </section>
-    <nav class="site">
-      <ul>
-        <li class="explore"><a href="/explore">Explore</a></li>
-        <li class="hear"><a href="/stories">Hear</a></li>
-        <li class="see"><a href="/art">See</a></li>
-        <li class="play"><a href="/play">Play</a></li>
-      </ul>
-    </nav>
-    <footer>
-      <p><em>The Fifth World</em> exists thanks to the generosity of our supporters, partners, and friends on Patreon. <a href="https://www.patreon.com/thefifthworld">Would you like to join them and become part of our growing community?</a></p>
-      <p class="copyleft">
-        <span class="icons">
-          <img src="https://s3.amazonaws.com/thefifthworld/website/images/cc.svg" alt="Creative Commons" />
-          <img src="https://s3.amazonaws.com/thefifthworld/website/images/by.svg" alt="Attribution" />
-          <img src="https://s3.amazonaws.com/thefifthworld/website/images/sa.svg" alt="Share-Alike" />
-        </span>
-        <em>The Fifth World</em> is licensed under a <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
-      </p>
-    </footer>
-    <script src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/v/1/0/0/bundle.js"></script>
+    <%- include('includes/footer') %>
   </body>
 </html>

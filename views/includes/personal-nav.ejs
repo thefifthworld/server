@@ -1,0 +1,9 @@
+<nav class="personal">
+        <% if (member) { %><ul>
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        </ul><% } else { %><ul>
+          <li><a href="/login">Log In</a></li>
+          <li><a href="/about/membership">How to Join</a></li>
+        </ul><% } %>
+      </nav>
