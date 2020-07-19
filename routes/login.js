@@ -5,7 +5,12 @@ const { isLoggedIn } = require('../auth')
 
 // GET /login
 login.get('/login', async (req, res) => {
-  res.render('login', { member: req.user })
+  res.render('login', {
+    member: req.user,
+    meta: {
+      title: 'Log In'
+    }
+  })
 })
 
 // POST /login
@@ -29,12 +34,23 @@ login.get('/login-route', isLoggedIn, async (req, res) => {
 
 // GET /dashboard
 login.get('/dashboard', isLoggedIn, async (req, res) => {
-  res.render('dashboard', { member: req.user })
+  res.render('dashboard', {
+    member: req.user,
+    meta: {
+      title: 'Your Dashboard'
+    }
+  })
 })
 
 // GET /welcome
 login.get('/welcome', isLoggedIn, async (req, res) => {
-  res.render('member-form', { member: req.user, welcome: true })
+  res.render('member-form', {
+    member: req.user,
+    welcome: true,
+    meta: {
+      title: 'Set Up Your Profile'
+    }
+  })
 })
 
 // GET /logout

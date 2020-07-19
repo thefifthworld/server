@@ -3,7 +3,7 @@ const pub = express.Router()
 
 // GET /
 pub.get('/', async (req, res) => {
-  res.render('home')
+  res.render('home', { meta: {} })
 })
 
 module.exports = pub

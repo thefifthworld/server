@@ -1,83 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>The Fifth World: Edit Your Profile</title>
-  <link rel="icon" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/favicon.svg" />
-  <link rel=”mask-icon” href=”https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/favicon.svg” color=”#000000" />
-  <link rel="apple-touch-icon" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/apple-touch-icon.png" />
-  <link rel="stylesheet" media="all" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/v/1/0/0/style.css" crossorigin="" />
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#ffffff" />
-  <meta name="description" content="A design system for the Fifth World." />
-</head>
-<body class="thefifthworld">
-<header>
-  <nav class="personal">
-    <ul>
-      <li><a href="standard-loggedin.html">Log in</a></li>
-      <li><a href="#">How to Join</a></li>
-    </ul>
-  </nav>
-  <h1 class="logo">
-    <a href="/">
-      <img src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/wordmark.black.svg" alt="The Fifth World" />
-    </a>
-  </h1>
-</header>
-<main>
-  <form action="/member" method="POST">
-    <input type="hidden" name="id" value="<%= member.id %>" />
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" value="<%= member.name %>" placeholder="What would you like us to call you?" />
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" value="<%= member.email %>" placeholder="you@example.com" />
-    <aside>
-      <p>A long, memorable phrase, like a sentence, can provide more security than an arcane string of random letters and numbers that you’ll have a hard time remembering. That’s why we ask for a pass phrase. We also leave it open in plain text to make it easier for you to come up with and use a stronger one. You can probably check for someone looking over your shoulder more easily than you can check for hackers.</p>
-      <p>If you submit this form without providing anything here, your old pass phrase will remain unchanged.</p>
-      <label for="passphrase">Passphrase</label>
-      <input type="text" id="passphrase" name="passphrase" placeholder="Enter a secret passphrase" />
-    </aside>
-    <label for="bio">About</label>
-    <textarea id="bio" name="bio"><%= member.bio %></textarea>
-    <h2>Links</h2>
-    <p>If you&rsquo;d like to make it easier for other people to find and follow you on social media or other networks, provide some links here. We&rsquo;ll show any that you provide on your profile. Any you choose not to share will simply not appear.</p>
-    <label for="facebook">Facebook</label>
-    <input type="url" id="facebook" name="facebook" value="<%= member.links.facebook %>" placeholder="https://facebook.com/your-username-here" />
-    <label for="twitter">Twitter</label>
-    <input type="url" id="twitter" name="twitter" value="<%= member.links.twitter %>" placeholder="https://twitter.com/your-username-here" />
-    <label for="github">GitHub</label>
-    <input type="url" id="github" name="github" value="<%= member.links.github %>" placeholder="https://github.com/your-username-here" />
-    <label for="patreon">Patreon</label>
-    <input type="url" id="patreon" name="patreon" value="<%= member.links.patreon %>" placeholder="https://patreon.com/your-username-here" />
-    <label for="website">Website</label>
-    <input type="url" id="website" name="website" value="<%= member.links.website %>" placeholder="https://yourwebsite.com" />
-    <p class="buttons">
-      <button>Save</button>
-      <a href="/member/<%= member.id %>" class="btn secondary">Cancel</a>
-    </p>
-  </form>
-</main>
-<nav class="site">
-  <ul>
-    <li class="explore"><a href="/explore">Explore</a></li>
-    <li class="hear"><a href="/stories">Hear</a></li>
-    <li class="see"><a href="/art">See</a></li>
-    <li class="play"><a href="/play">Play</a></li>
-  </ul>
-</nav>
-<footer>
-  <p><em>The Fifth World</em> exists thanks to the generosity of our supporters, partners, and friends on Patreon. <a href="https://www.patreon.com/thefifthworld">Would you like to join them and become part of our growing community?</a></p>
-  <p class="copyleft">
-        <span class="icons">
-          <img src="https://s3.amazonaws.com/thefifthworld/website/images/cc.svg" alt="Creative Commons" />
-          <img src="https://s3.amazonaws.com/thefifthworld/website/images/by.svg" alt="Attribution" />
-          <img src="https://s3.amazonaws.com/thefifthworld/website/images/sa.svg" alt="Share-Alike" />
-        </span>
-    <em>The Fifth World</em> is licensed under a <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
-  </p>
-</footer>
-<script src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/v/1/0/0/bundle.js"></script>
-</body>
+  <%- include('includes/head', { meta }) %>
+  <body class="thefifthworld">
+    <header>
+      <nav class="personal">
+        <ul>
+          <li><a href="standard-loggedin.html">Log in</a></li>
+          <li><a href="#">How to Join</a></li>
+        </ul>
+      </nav>
+      <h1 class="logo">
+        <a href="/">
+          <img src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/wordmark.black.svg" alt="The Fifth World" />
+        </a>
+      </h1>
+    </header>
+    <main>
+      <form action="/member" method="POST">
+        <input type="hidden" name="id" value="<%= member.id %>" />
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="<%= member.name %>" placeholder="What would you like us to call you?" />
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="<%= member.email %>" placeholder="you@example.com" />
+        <aside>
+          <p>A long, memorable phrase, like a sentence, can provide more security than an arcane string of random letters and numbers that you’ll have a hard time remembering. That’s why we ask for a pass phrase. We also leave it open in plain text to make it easier for you to come up with and use a stronger one. You can probably check for someone looking over your shoulder more easily than you can check for hackers.</p>
+          <p>If you submit this form without providing anything here, your old pass phrase will remain unchanged.</p>
+          <label for="passphrase">Passphrase</label>
+          <input type="text" id="passphrase" name="passphrase" placeholder="Enter a secret passphrase" />
+        </aside>
+        <label for="bio">About</label>
+        <textarea id="bio" name="bio"><%= member.bio %></textarea>
+        <h2>Links</h2>
+        <p>If you&rsquo;d like to make it easier for other people to find and follow you on social media or other networks, provide some links here. We&rsquo;ll show any that you provide on your profile. Any you choose not to share will simply not appear.</p>
+        <label for="facebook">Facebook</label>
+        <input type="url" id="facebook" name="facebook" value="<%= member.links.facebook %>" placeholder="https://facebook.com/your-username-here" />
+        <label for="twitter">Twitter</label>
+        <input type="url" id="twitter" name="twitter" value="<%= member.links.twitter %>" placeholder="https://twitter.com/your-username-here" />
+        <label for="github">GitHub</label>
+        <input type="url" id="github" name="github" value="<%= member.links.github %>" placeholder="https://github.com/your-username-here" />
+        <label for="patreon">Patreon</label>
+        <input type="url" id="patreon" name="patreon" value="<%= member.links.patreon %>" placeholder="https://patreon.com/your-username-here" />
+        <label for="web">Website</label>
+        <input type="url" id="web" name="web" value="<%= member.links.web %>" placeholder="https://yourwebsite.com" />
+        <p class="buttons">
+          <button>Save</button>
+          <a href="/member/<%= member.id %>" class="btn secondary">Cancel</a>
+        </p>
+      </form>
+    </main>
+    <nav class="site">
+      <ul>
+        <li class="explore"><a href="/explore">Explore</a></li>
+        <li class="hear"><a href="/stories">Hear</a></li>
+        <li class="see"><a href="/art">See</a></li>
+        <li class="play"><a href="/play">Play</a></li>
+      </ul>
+    </nav>
+    <footer>
+      <p><em>The Fifth World</em> exists thanks to the generosity of our supporters, partners, and friends on Patreon. <a href="https://www.patreon.com/thefifthworld">Would you like to join them and become part of our growing community?</a></p>
+      <p class="copyleft">
+            <span class="icons">
+              <img src="https://s3.amazonaws.com/thefifthworld/website/images/cc.svg" alt="Creative Commons" />
+              <img src="https://s3.amazonaws.com/thefifthworld/website/images/by.svg" alt="Attribution" />
+              <img src="https://s3.amazonaws.com/thefifthworld/website/images/sa.svg" alt="Share-Alike" />
+            </span>
+        <em>The Fifth World</em> is licensed under a <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+      </p>
+    </footer>
+    <script src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/v/1/0/0/bundle.js"></script>
+  </body>
 </html>
