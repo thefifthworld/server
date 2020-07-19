@@ -8,7 +8,8 @@ login.get('/login', isLoggedIn, async (req, res) => {
   res.render('login', {
     member: req.user,
     meta: {
-      title: 'Log In'
+      title: 'Log In',
+      url: 'https://thefifthworld.com/login'
     }
   })
 })
@@ -37,7 +38,8 @@ login.get('/dashboard', requireLoggedIn, async (req, res) => {
   res.render('dashboard', {
     member: req.user,
     meta: {
-      title: 'Your Dashboard'
+      title: 'Your Dashboard',
+      url: 'https://thefifthworld.com/dashboard'
     }
   })
 })
@@ -48,7 +50,8 @@ login.get('/welcome', requireLoggedIn, async (req, res) => {
     member: req.user,
     welcome: true,
     meta: {
-      title: 'Set Up Your Profile'
+      title: 'Set Up Your Profile',
+      url: 'https://thefifthworld.com/welcome'
     }
   })
 })
