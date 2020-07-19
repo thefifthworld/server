@@ -1,5 +1,4 @@
 const axios = require('axios')
-const jsonwebtoken = require('jsonwebtoken')
 const LocalStrategy = require('passport-local').Strategy
 const config = require('./config')
 
@@ -40,7 +39,7 @@ const requireLoggedIn = async (req, res, next) => {
   if (req.user) {
     return next()
   } else {
-    return res.redirect('/login')
+    return res.status(401).render('login', req.viewOpts)
   }
 }
 
@@ -56,7 +55,7 @@ const requireAdmin = async (req, res, next) => {
   if (req.user && req.user.admin) {
     return next()
   } else {
-    return res.redirect('/login')
+    return res.status(401).render('login', req.viewOpts)
   }
 }
 
