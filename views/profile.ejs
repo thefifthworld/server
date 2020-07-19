@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('includes/head', { meta }) %>
+  <body class="thefifthworld">
+    <%- include('includes/header', { member }) %>
+    <main>
+      <h1><%= profile.name %></h1>
+      <%- profile.bio %>
+      <% if (profile.showLinks) { %>
+      <ul class="social-media">
+        <% if (profile.links.web && profile.links.web.length > 0) { %><li class="web"><a href="<%= profile.links.web %>" title="<%= profile.links.web %>"><%= profile.links.web %></a></li><% } %>
+        <% if (profile.links.facebook && profile.links.facebook.length > 0) { %><li class="facebook"><a href="<%= profile.links.facebook %>" title="Facebook">Facebook</a></li><% } %>
+        <% if (profile.links.twitter && profile.links.twitter.length > 0) { %><li class="twitter"><a href="<%= profile.links.twitter %>" title="Twitter">Twitter</a></li><% } %>
+        <% if (profile.links.github && profile.links.github.length > 0) { %><li class="github"><a href="<%= profile.links.github %>" title="GitHub">GitHub</a></li><% } %>
+        <% if (profile.links.patreon && profile.links.patreon.length > 0) { %><li class="patreon"><a href="<%= profile.links.patreon %>" title="Patreon">Patreon</a></li><% } %>
+      </ul>
+      <% } %>
+    </main>
+    <%- include('includes/footer') %>
+  </body>
+</html>
