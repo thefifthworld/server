@@ -21,7 +21,8 @@ const initializePassport = passport => {
       return res.status === 200
         ? done(null, res.data)
         : done(null, false, errmsg)
-    } catch {
+    } catch (err) {
+      console.error(err)
       done(null, false, errmsg)
     }
   }))
