@@ -19,6 +19,23 @@ server.use(passport.initialize())
 server.use(passport.session())
 initializePassport(passport)
 
+/**
+ * This universal middleware adds a basic options object to the `req` object.
+ * Initially, this simply sets the URL to the value of `req.originalUrl`, but
+ * this also provides a place to easily store other data that needs to get to
+ * the view, such as the logged-in member or the page title.
+ */
+
+server.use((req, res, next) => {
+  req.viewOpts = {
+    member: null,
+    meta: {
+      url: `${req.protocol}://${req.get('host')}${req.originalUrl}`
+    }
+  }
+  next()
+})
+
 server.use('/', login)
 server.use('/', pub)
 

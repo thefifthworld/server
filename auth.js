@@ -40,6 +40,7 @@ const isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
     req.user = token
+    req.viewOpts.member = req.user
   }
   return next()
 }
@@ -56,6 +57,7 @@ const requireLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
     req.user = token
+    req.viewOpts.member = req.user
     if (token && token.id) {
       return next()
     }
@@ -75,6 +77,7 @@ const requireAdmin = async (req, res, next) => {
   if (req.cookies.jwt) {
     const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
     req.user = token
+    req.viewOpts.member = req.user
     if (token && token.id && token.admin) {
       return next()
     }

@@ -5,13 +5,8 @@ const { isLoggedIn, requireLoggedIn } = require('../auth')
 
 // GET /login
 login.get('/login', isLoggedIn, async (req, res) => {
-  res.render('login', {
-    member: req.user,
-    meta: {
-      title: 'Log In',
-      url: 'https://thefifthworld.com/login'
-    }
-  })
+  req.viewOpts.meta.title = 'Log In'
+  res.render('login', req.viewOpts)
 })
 
 // POST /login
@@ -35,25 +30,15 @@ login.get('/login-route', requireLoggedIn, async (req, res) => {
 
 // GET /dashboard
 login.get('/dashboard', requireLoggedIn, async (req, res) => {
-  res.render('dashboard', {
-    member: req.user,
-    meta: {
-      title: 'Your Dashboard',
-      url: 'https://thefifthworld.com/dashboard'
-    }
-  })
+  req.viewOpts.meta.title = 'Your Dashboard'
+  res.render('dashboard', req.viewOpts)
 })
 
 // GET /welcome
 login.get('/welcome', requireLoggedIn, async (req, res) => {
-  res.render('member-form', {
-    member: req.user,
-    welcome: true,
-    meta: {
-      title: 'Set Up Your Profile',
-      url: 'https://thefifthworld.com/welcome'
-    }
-  })
+  req.viewOpts.welcome = true
+  req.viewOpts.meta.title = 'Set Up Your Profile'
+  res.render('member-form', req.viewOpts)
 })
 
 // GET /logout
