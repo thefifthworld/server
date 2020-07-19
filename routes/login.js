@@ -5,7 +5,7 @@ const { isLoggedIn } = require('../auth')
 
 // GET /login
 login.get('/login', async (req, res) => {
-  res.render('login')
+  res.render('login', { member: req.user })
 })
 
 // POST /login
@@ -20,7 +20,21 @@ login.post('/login', (passport.authenticate('local', { session: false })), async
 
 // GET /login-route
 login.get('/login-route', isLoggedIn, async (req, res) => {
-  res.sendStatus(200)
+  if (req.user && req.user.email) {
+    res.redirect('/dashboard')
+  } else if (req.user) {
+    res.redirect('/welcome')
+  }
+})
+
+// GET /dashboard
+login.get('/dashboard', isLoggedIn, async (req, res) => {
+  res.render('dashboard', { member: req.user })
+})
+
+// GET /welcome
+login.get('/welcome', isLoggedIn, async (req, res) => {
+  res.render('member-form', { member: req.user, welcome: true })
 })
 
 // GET /logout
