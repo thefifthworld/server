@@ -29,14 +29,30 @@ const initializePassport = passport => {
 }
 
 /**
- * Express.js middleware that tests if the user is logged in. If she isn't,
- * redirect her to /login.
+ * Express.js middleware that tests if the user is logged in. If she is, saves
+ * her data to req.user.
  * @param req {Object} - The Express.js request object.
  * @param res {Object} - The Express.js response object.
  * @param next {function} - The next middleware to call.
  */
 
 const isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
+    req.user = token
+  }
+  return next()
+}
+
+/**
+ * Express.js middleware that tests if the user is logged in. If she is, saves
+ * her data to req.user. If she isn't, redirects to /login.
+ * @param req {Object} - The Express.js request object.
+ * @param res {Object} - The Express.js response object.
+ * @param next {function} - The next middleware to call.
+ */
+
+const requireLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
     req.user = token
@@ -55,7 +71,7 @@ const isLoggedIn = async (req, res, next) => {
  * @param next {function} - The next middleware to call.
  */
 
-const isAdmin = async (req, res, next) => {
+const requireAdmin = async (req, res, next) => {
   if (req.cookies.jwt) {
     const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
     req.user = token
@@ -69,5 +85,6 @@ const isAdmin = async (req, res, next) => {
 module.exports = {
   initializePassport,
   isLoggedIn,
-  isAdmin
+  requireLoggedIn,
+  requireAdmin
 }

@@ -3,12 +3,7 @@
   <%- include('includes/head', { meta }) %>
   <body class="thefifthworld stack">
     <header class="home">
-      <nav class="personal">
-        <ul>
-          <li><a href="/login">Log in</a></li>
-          <li><a href="/about/membership">How to Join</a></li>
-        </ul>
-      </nav>
+      <%- include('includes/personal-nav', { member }) %>
       <h1 class="logo">
         <a href="/">
           <img src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/wordmark.white.svg" alt="The Fifth World" />

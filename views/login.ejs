@@ -2,19 +2,7 @@
 <html lang="en">
   <%- include('includes/head', { meta }) %>
   <body class="thefifthworld">
-    <header>
-      <nav class="personal">
-        <ul>
-          <li><a href="standard-loggedin.html">Log in</a></li>
-          <li><a href="#">How to Join</a></li>
-        </ul>
-      </nav>
-      <h1 class="logo">
-        <a href="/">
-          <img src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/wordmark.black.svg" alt="The Fifth World" />
-        </a>
-      </h1>
-    </header>
+    <%- include('includes/header', { member }) %>
     <main>
       <section class="login">
         <form action="/login" method="post">

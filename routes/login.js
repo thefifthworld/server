@@ -1,10 +1,10 @@
 const express = require('express')
 const passport = require('passport')
 const login = express.Router()
-const { isLoggedIn } = require('../auth')
+const { isLoggedIn, requireLoggedIn } = require('../auth')
 
 // GET /login
-login.get('/login', async (req, res) => {
+login.get('/login', isLoggedIn, async (req, res) => {
   res.render('login', {
     member: req.user,
     meta: {
@@ -24,7 +24,7 @@ login.post('/login', (passport.authenticate('local', { session: false })), async
 })
 
 // GET /login-route
-login.get('/login-route', isLoggedIn, async (req, res) => {
+login.get('/login-route', requireLoggedIn, async (req, res) => {
   if (req.user && req.user.email) {
     res.redirect('/dashboard')
   } else if (req.user) {
@@ -33,7 +33,7 @@ login.get('/login-route', isLoggedIn, async (req, res) => {
 })
 
 // GET /dashboard
-login.get('/dashboard', isLoggedIn, async (req, res) => {
+login.get('/dashboard', requireLoggedIn, async (req, res) => {
   res.render('dashboard', {
     member: req.user,
     meta: {
@@ -43,7 +43,7 @@ login.get('/dashboard', isLoggedIn, async (req, res) => {
 })
 
 // GET /welcome
-login.get('/welcome', isLoggedIn, async (req, res) => {
+login.get('/welcome', requireLoggedIn, async (req, res) => {
   res.render('member-form', {
     member: req.user,
     welcome: true,
