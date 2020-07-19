@@ -1,10 +1,10 @@
 const express = require('express')
 const passport = require('passport')
 const login = express.Router()
-const { isLoggedIn, requireLoggedIn } = require('../auth')
+const { requireLoggedIn } = require('../auth')
 
 // GET /login
-login.get('/login', isLoggedIn, async (req, res) => {
+login.get('/login', async (req, res) => {
   req.viewOpts.meta.title = 'Log In'
   res.render('login', req.viewOpts)
 })
