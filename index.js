@@ -50,14 +50,14 @@ server.use('/', pub)
 
 // 404
 server.use((req, res) => {
-  req.viewOpts.antisocial = true
+  req.viewOpts.meta.antisocial = true
   res.status(404).render('errors/e404', req.viewOpts)
 })
 
 // 500
 server.use((err, req, res) => {
   console.error(err)
-  req.viewOpts.antisocial = true
+  req.viewOpts.meta.antisocial = true
   res.status(500).render('errors/e500', req.viewOpts)
 })
 
