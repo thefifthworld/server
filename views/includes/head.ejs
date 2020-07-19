@@ -10,6 +10,7 @@
     <meta name="theme-color" content="#ffffff" />
     <meta name="description" content="<%= meta.desc || 'Four centuries from now, humanity thrives beyond civilization.' %>>" />
 
+    <% if (!antisocial) { %>
     <!-- Twitter Card data -->
     <meta name="twitter:title" content="<%= meta.title || 'The Fifth World' %>" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -25,4 +26,5 @@
     <meta property="og:description" content="<%= meta.desc || 'Four centuries from now, humanity thrives beyond civilization.' %>" />
     <meta property="og:image" content="<%= meta.img || 'https://s3.amazonaws.com/thefifthworld/website/images/social/default.jpg' %>" />
     <meta property="fb:app_id" content="241682169673933" />
+    <% } %>
   </head>

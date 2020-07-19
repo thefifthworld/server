@@ -48,6 +48,19 @@ server.use(async (req, res, next) => {
 server.use('/', login)
 server.use('/', pub)
 
+// 404
+server.use((req, res) => {
+  req.viewOpts.antisocial = true
+  res.status(404).render('errors/e404', req.viewOpts)
+})
+
+// 500
+server.use((err, req, res) => {
+  console.error(err)
+  req.viewOpts.antisocial = true
+  res.status(500).render('errors/e500', req.viewOpts)
+})
+
 const { port } = config
 server.listen(port, () => {
   console.log(`The Fifth World server is listening on port ${port}`)
