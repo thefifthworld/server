@@ -8,6 +8,7 @@ const config = require('./config')
 const { initializePassport } = require('./auth')
 const pub = require('./routes/public')
 const login = require('./routes/login')
+const members = require('./routes/members')
 
 const server = express()
 server.set('view engine', 'ejs')
@@ -46,6 +47,7 @@ server.use(async (req, res, next) => {
 })
 
 server.use('/', login)
+server.use('/', members)
 server.use('/', pub)
 
 // 404

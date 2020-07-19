@@ -34,13 +34,6 @@ login.get('/dashboard', requireLoggedIn, async (req, res) => {
   res.render('dashboard', req.viewOpts)
 })
 
-// GET /welcome
-login.get('/welcome', requireLoggedIn, async (req, res) => {
-  req.viewOpts.welcome = true
-  req.viewOpts.meta.title = 'Set Up Your Profile'
-  res.render('member-form', req.viewOpts)
-})
-
 // GET /logout
 login.get('/logout', async (req, res) => {
   res.cookie('jwt', '', { maxAge: 0 })
