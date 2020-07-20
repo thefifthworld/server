@@ -26,4 +26,17 @@ members.get('/member/:id', async (req, res, next) => {
   return next()
 })
 
+// GET /members/:id/edit
+members.get('/member/:id/edit', async (req, res, next) => {
+  if (req.user && (req.user === req.params.id || req.user.admin)) {
+    const resp = await axios.get(`${config.api.root}/members/${req.params.id}`)
+    if (resp && resp.status === 200) {
+      req.viewOpts.profile = resp.data
+      console.log(req.viewOpts)
+      return res.render('member-form', req.viewOpts)
+    }
+  }
+  return next()
+})
+
 module.exports = members
