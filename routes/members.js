@@ -32,11 +32,23 @@ members.get('/member/:id/edit', async (req, res, next) => {
     const resp = await axios.get(`${config.api.root}/members/${req.params.id}`)
     if (resp && resp.status === 200) {
       req.viewOpts.profile = resp.data
-      console.log(req.viewOpts)
       return res.render('member-form', req.viewOpts)
     }
   }
   return next()
+})
+
+// POST /member
+members.post('/member', requireLoggedIn, async (req, res) => {
+  const { id } = req.body
+  if (id) {
+    const updates = JSON.parse(JSON.stringify(req.body))
+    if (updates.email && updates.email.length === 0) delete updates.email
+    if (updates.password && updates.password.length === 0) delete updates.password
+    const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
+    await axios.patch(`${config.api.root}/members/${id}`, updates, opts)
+    return res.redirect(`/member/${id}`)
+  }
 })
 
 module.exports = members
