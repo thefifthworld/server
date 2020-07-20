@@ -2,7 +2,7 @@
 <html lang="en">
   <%- include('includes/head', { meta }) %>
   <body class="thefifthworld">
-    <%- include('includes/header', { member }) %>
+    <%- include('includes/header', { member, showLogo: true }) %>
     <main>
       <form action="/member" method="POST">
         <input type="hidden" name="id" value="<%= member.id %>" />
