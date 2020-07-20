@@ -5,7 +5,7 @@
     <%- include('includes/header', { member }) %>
     <main>
       <h1><%= profile.name %></h1>
-      <%- profile.bio %>
+      <%- profile.bio.html %>
       <% if (profile.showLinks) { %>
       <ul class="social-media">
         <% if (profile.links.web && profile.links.web.length > 0) { %><li class="web"><a href="<%= profile.links.web %>" title="<%= profile.links.web %>"><%= profile.links.web %></a></li><% } %>
