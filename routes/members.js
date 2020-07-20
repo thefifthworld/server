@@ -20,6 +20,7 @@ members.get('/member/:id', async (req, res, next) => {
       const keys = Object.getOwnPropertyNames(resp.data.links)
       req.viewOpts.profile.showLinks = keys.reduce((acc, curr) => acc && resp.data.links[curr] && resp.data.links[curr].length > 0, true)
     }
+    req.viewOpts.profile.canEdit = req.user && (req.user.id === resp.data.id || req.user.admin)
     return res.render('profile', req.viewOpts)
   }
   return next()

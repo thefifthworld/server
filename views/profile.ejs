@@ -15,6 +15,11 @@
         <% if (profile.links.patreon && profile.links.patreon.length > 0) { %><li class="patreon"><a href="<%= profile.links.patreon %>" title="Patreon">Patreon</a></li><% } %>
       </ul>
       <% } %>
+      <% if (profile.canEdit) { %>
+      <p class="buttons">
+        <a href="/members/<% profile.id %>/edit" class="button">Edit Profile</a>
+      </p>
+      <% } %>
     </main>
     <%- include('includes/footer') %>
   </body>
