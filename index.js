@@ -8,6 +8,7 @@ const { initializePassport } = require('./auth')
 const {
   initViewOpts,
   verifyJWT,
+  renewJWT,
   error404,
   error500
 } = require('./universal-middlewares')
@@ -37,6 +38,7 @@ initializePassport(passport)
 
 server.use(initViewOpts)
 server.use(verifyJWT)
+server.use(renewJWT)
 
 server.use('/', login)
 server.use('/', members)
