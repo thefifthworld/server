@@ -21,10 +21,10 @@ login.post('/login', (passport.authenticate('local', { session: false })), async
 
 // GET /login-route
 login.get('/login-route', requireLoggedIn, async (req, res) => {
-  if (req.user && req.user.email) {
-    res.redirect('/dashboard')
-  } else if (req.user) {
+  if (req.user && req.user.nopass) {
     res.redirect('/welcome')
+  } else if (req.user) {
+    res.redirect('/dashboard')
   }
 })
 
