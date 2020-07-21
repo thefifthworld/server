@@ -5,7 +5,13 @@ const passport = require('passport')
 
 const config = require('./config')
 const { initializePassport } = require('./auth')
-const { initViewOpts, verifyJWT } = require('./universal-middlewares')
+const {
+  initViewOpts,
+  verifyJWT,
+  error404,
+  error500
+} = require('./universal-middlewares')
+
 const pub = require('./routes/public')
 const login = require('./routes/login')
 const members = require('./routes/members')
@@ -36,18 +42,9 @@ server.use('/', login)
 server.use('/', members)
 server.use('/', pub)
 
-// 404
-server.use((req, res) => {
-  req.viewOpts.meta.antisocial = true
-  res.status(404).render('errors/e404', req.viewOpts)
-})
-
-// 500
-server.use((err, req, res) => {
-  console.error(err)
-  req.viewOpts.meta.antisocial = true
-  res.status(500).render('errors/e500', req.viewOpts)
-})
+// Error handling
+server.use(error404)
+server.use(error500)
 
 const { port } = config
 server.listen(port, () => {

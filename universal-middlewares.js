@@ -37,7 +37,34 @@ const verifyJWT = async (req, res, next) => {
   next()
 }
 
+/**
+ * A universal middleware for Express.js that handles the case when the
+ * requested page could not be found.
+ * @param req {Object} - The Express.js request object.
+ * @param res {Object} - The Express.js response object.
+ */
+
+const error404 = (req, res) => {
+  req.viewOpts.meta.antisocial = true
+  res.status(404).render('errors/e404', req.viewOpts)
+}
+
+/**
+ * A universal middleware for Express.js that handles the case when an error is
+ * encountered.
+ * @param req {Object} - The Express.js request object.
+ * @param res {Object} - The Express.js response object.
+ */
+
+const error500 = (err, req, res) => {
+  console.error(err)
+  req.viewOpts.meta.antisocial = true
+  res.status(500).render('errors/e500', req.viewOpts)
+}
+
 module.exports = {
   initViewOpts,
-  verifyJWT
+  verifyJWT,
+  error404,
+  error500
 }
