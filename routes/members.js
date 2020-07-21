@@ -43,8 +43,8 @@ members.post('/member', requireLoggedIn, async (req, res) => {
   const { id } = req.body
   if (id) {
     const updates = JSON.parse(JSON.stringify(req.body))
-    if (updates.email && updates.email.length === 0) delete updates.email
-    if (updates.password && updates.password.length === 0) delete updates.password
+    if (updates.email.length === 0) delete updates.email
+    if (updates.password.length === 0) delete updates.password
     const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
     await axios.patch(`${config.api.root}/members/${id}`, updates, opts)
     return res.redirect(`/member/${id}`)
