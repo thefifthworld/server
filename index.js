@@ -1,11 +1,18 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const jsonwebtoken = require('jsonwebtoken')
 const passport = require('passport')
 
 const config = require('./config')
 const { initializePassport } = require('./auth')
+const {
+  initViewOpts,
+  verifyJWT,
+  renewJWT,
+  error404,
+  error500
+} = require('./universal-middlewares')
+
 const pub = require('./routes/public')
 const login = require('./routes/login')
 const members = require('./routes/members')
@@ -29,39 +36,17 @@ initializePassport(passport)
  * the request comes from a logged-in user.
  */
 
-server.use(async (req, res, next) => {
-  req.viewOpts = {
-    member: null,
-    meta: {
-      url: `${req.protocol}://${req.get('host')}${req.originalUrl}`
-    }
-  }
-
-  if (req.cookies.jwt) {
-    const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
-    req.user = token
-    req.viewOpts.member = req.user
-  }
-
-  next()
-})
+server.use(initViewOpts)
+server.use(verifyJWT)
+server.use(renewJWT)
 
 server.use('/', login)
 server.use('/', members)
 server.use('/', pub)
 
-// 404
-server.use((req, res) => {
-  req.viewOpts.meta.antisocial = true
-  res.status(404).render('errors/e404', req.viewOpts)
-})
-
-// 500
-server.use((err, req, res) => {
-  console.error(err)
-  req.viewOpts.meta.antisocial = true
-  res.status(500).render('errors/e500', req.viewOpts)
-})
+// Error handling
+server.use(error404)
+server.use(error500)
 
 const { port } = config
 server.listen(port, () => {
