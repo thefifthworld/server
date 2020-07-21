@@ -1,11 +1,11 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const jsonwebtoken = require('jsonwebtoken')
 const passport = require('passport')
 
 const config = require('./config')
 const { initializePassport } = require('./auth')
+const { initViewOpts, verifyJWT } = require('./universal-middlewares')
 const pub = require('./routes/public')
 const login = require('./routes/login')
 const members = require('./routes/members')
@@ -29,22 +29,8 @@ initializePassport(passport)
  * the request comes from a logged-in user.
  */
 
-server.use(async (req, res, next) => {
-  req.viewOpts = {
-    member: null,
-    meta: {
-      url: `${req.protocol}://${req.get('host')}${req.originalUrl}`
-    }
-  }
-
-  if (req.cookies.jwt) {
-    const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
-    req.user = token
-    req.viewOpts.member = req.user
-  }
-
-  next()
-})
+server.use(initViewOpts)
+server.use(verifyJWT)
 
 server.use('/', login)
 server.use('/', members)
