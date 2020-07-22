@@ -1,6 +1,33 @@
 const axios = require('axios')
 const LocalStrategy = require('passport-local').Strategy
+const PatreonStrategy = require('passport-patreon').Strategy
 const config = require('./config')
+
+/**
+ * Handle OAuth 2.0 authorization requests.
+ * @param provider {?string} - The name of the OAuth 2.0 provider (e.g.,
+ *   `patreon`, `github`, `facebook`, or `twitter`).
+ * @param id {?string} - The OAuth 2.0 token ID.
+ * @param token {?string} - The OAuth 2.0 token secret.
+ * @param user {?string} - The JSON Web Token of the currently logged-in user.
+ * @param done {function} - The callback function.
+ * @returns {Promise} - A Promise that resolves when the OAuth 2.0 token has
+ *   been authorized, saved to the API, or rejected.
+ */
+
+const handleAuth = async (provider, id, token, user, done) => {
+  if (provider && id) {
+    const jwt = await axios.post(`${config.api.root}/members/auth`, { provider, id })
+    if (jwt) {
+      return done(null, jwt)
+    } else if (user) {
+      const opts = { headers: { Authorization: `Bearer ${user}` } }
+      await axios.post(`${config.api.root}/members/add-auth`, { provider, id, token }, opts)
+      return done(null, user)
+    }
+  }
+  return done('Unauthorized')
+}
 
 /**
  * Set up Passport.js
@@ -24,6 +51,15 @@ const initializePassport = passport => {
       console.error(err)
       done(null, false, errmsg)
     }
+  }))
+
+  passport.use(new PatreonStrategy({
+    clientID: config.patreon.id,
+    clientSecret: config.patreon.secret,
+    callbackURL: config.patreon.callback,
+    passReqToCallback: true
+  }, async (req, token, secret, profile, done) => {
+    return handleAuth('patron', profile.id, token, req.user, done)
   }))
 }
 
