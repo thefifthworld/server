@@ -19,6 +19,14 @@ login.post('/login', (passport.authenticate('local', { session: false })), async
   }
 })
 
+// GET /login/patreon
+// GET /connect/patreon
+login.get(['/login/patreon', '/connect/patreon'], passport.authenticate('patreon'))
+
+// GET /login/patreon/callback
+// GET /connect/patreon/callback
+login.get(['/login/patreon/callback', '/connect/patreon/callback'], passport.authenticate('patreon', { successRedirect: '/login-route', failureRedirect: '/login' }))
+
 // GET /login-route
 login.get('/login-route', requireLoggedIn, async (req, res) => {
   if (req.user && req.user.nopass) {
