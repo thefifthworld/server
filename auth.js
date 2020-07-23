@@ -1,6 +1,7 @@
 const axios = require('axios')
 const LocalStrategy = require('passport-local').Strategy
 const PatreonStrategy = require('passport-patreon').Strategy
+const DiscordStrategy = require('passport-discord').Strategy
 const config = require('./config')
 
 /**
@@ -58,6 +59,15 @@ const initializePassport = passport => {
     passReqToCallback: true
   }, async (req, token, secret, profile, done) => {
     return handleAuth('patreon', profile.id, token, req.user, done)
+  }))
+
+  passport.use(new DiscordStrategy({
+    clientID: config.discord.id,
+    clientSecret: config.discord.secret,
+    callbackURL: config.discord.callback,
+    passReqToCallback: true
+  }, async (req, token, secret, profile, done) => {
+    return handleAuth('discord', profile.id, token, req.user, done)
   }))
 }
 

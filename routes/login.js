@@ -39,6 +39,18 @@ login.get(patreonCallbackPaths, passport.authenticate('patreon', {  session: fal
   res.redirect('/dashboard')
 })
 
+// GET /login/discord
+// GET /connect/discord
+const discordLoginPaths = ['/login/discord', '/connect/discord']
+login.get(discordLoginPaths, passport.authenticate('discord', { scope: [ 'identify' ] }))
+
+// GET /login/discord/callback
+// GET /connect/discord/callback
+const discordCallbackPaths = ['/login/discord/callback', '/connect/discord/callback']
+login.get(discordCallbackPaths, passport.authenticate('discord', {  session: false }), setJWTFromUser, requireLoggedIn, async (req, res) => {
+  res.redirect('/dashboard')
+})
+
 // GET /login-route
 login.get('/login-route', requireLoggedIn, async (req, res) => {
   if (req.user && req.user.nopass) {
