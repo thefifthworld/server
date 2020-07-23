@@ -16,15 +16,13 @@ const config = require('./config')
  */
 
 const handleAuth = async (provider, id, token, user, done) => {
-  if (provider && id) {
-    const jwt = await axios.post(`${config.api.root}/members/auth`, { provider, id })
-    if (jwt) {
-      return done(null, jwt)
-    } else if (user) {
-      const opts = { headers: { Authorization: `Bearer ${user}` } }
-      await axios.post(`${config.api.root}/members/add-auth`, { provider, id, token }, opts)
-      return done(null, user)
-    }
+  if (user && provider && id) {
+    const opts = { headers: { Authorization: `Bearer ${user}` } }
+    await axios.post(`${config.api.root}/members/add-auth`, { provider, id, token }, opts)
+    return done(null, user)
+  } else if (provider && id) {
+    const res = await axios.post(`${config.api.root}/members/auth`, { provider, id })
+    if (res && res.status === 200) return done(null, res.data)
   }
   return done('Unauthorized')
 }
@@ -59,7 +57,7 @@ const initializePassport = passport => {
     callbackURL: config.patreon.callback,
     passReqToCallback: true
   }, async (req, token, secret, profile, done) => {
-    return handleAuth('patron', profile.id, token, req.user, done)
+    return handleAuth('patreon', profile.id, token, req.user, done)
   }))
 }
 
