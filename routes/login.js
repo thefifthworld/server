@@ -51,6 +51,18 @@ login.get(discordCallbackPaths, passport.authenticate('discord', {  session: fal
   res.redirect('/dashboard')
 })
 
+// GET /login/google
+// GET /connect/google
+const googleLoginPaths = ['/login/google', '/connect/google']
+login.get(googleLoginPaths, passport.authenticate('google', { scope: [ 'email', 'profile' ] }))
+
+// GET /login/google/callback
+// GET /connect/google/callback
+const googleCallbackPaths = ['/login/google/callback', '/connect/google/callback']
+login.get(googleCallbackPaths, passport.authenticate('google', {  session: false }), setJWTFromUser, requireLoggedIn, async (req, res) => {
+  res.redirect('/dashboard')
+})
+
 // GET /login-route
 login.get('/login-route', requireLoggedIn, async (req, res) => {
   if (req.user && req.user.nopass) {

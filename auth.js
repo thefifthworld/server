@@ -2,6 +2,7 @@ const axios = require('axios')
 const LocalStrategy = require('passport-local').Strategy
 const PatreonStrategy = require('passport-patreon').Strategy
 const DiscordStrategy = require('passport-discord').Strategy
+const GoogleStrategy = require('passport-google-oauth2').Strategy
 const config = require('./config')
 
 /**
@@ -68,6 +69,15 @@ const initializePassport = passport => {
     passReqToCallback: true
   }, async (req, token, secret, profile, done) => {
     return handleAuth('discord', profile.id, token, req.user, done)
+  }))
+
+  passport.use(new GoogleStrategy({
+    clientID: config.google.id,
+    clientSecret: config.google.secret,
+    callbackURL: config.google.callback,
+    passReqToCallback: true
+  }, async (req, token, secret, profile, done) => {
+    return handleAuth('google', profile.id, token, req.user, done)
   }))
 }
 
