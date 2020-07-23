@@ -63,6 +63,18 @@ login.get(googleCallbackPaths, passport.authenticate('google', {  session: false
   res.redirect('/dashboard')
 })
 
+// GET /login/facebook
+// GET /connect/facebook
+const facebookLoginPaths = ['/login/facebook', '/connect/facebook']
+login.get(facebookLoginPaths, passport.authenticate('facebook', { scope: [ 'email' ] }))
+
+// GET /login/facebook/callback
+// GET /connect/facebook/callback
+const facebookCallbackPaths = ['/login/facebook/callback', '/connect/facebook/callback']
+login.get(facebookCallbackPaths, passport.authenticate('facebook', {  session: false }), setJWTFromUser, requireLoggedIn, async (req, res) => {
+  res.redirect('/dashboard')
+})
+
 // GET /login-route
 login.get('/login-route', requireLoggedIn, async (req, res) => {
   if (req.user && req.user.nopass) {
