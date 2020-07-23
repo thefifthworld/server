@@ -3,6 +3,19 @@ const passport = require('passport')
 const login = express.Router()
 const { requireLoggedIn } = require('../auth')
 
+/**
+ * Express.js middleware that can take the user from Passport.js and save it to
+ * our JSON Web Token cookie.
+ * @param req {Object} - The Express.js request object.
+ * @param res {Object} - The Express.js response object.
+ * @param next {function} - The next Express.js function to call.
+ */
+
+const setJWTFromUser = (req, res, next) => {
+  if (req.user) res.cookie('jwt', req.user, { maxAge: 900000 })
+  next()
+}
+
 // GET /login
 login.get('/login', async (req, res) => {
   req.viewOpts.meta.title = 'Log In'
@@ -10,13 +23,20 @@ login.get('/login', async (req, res) => {
 })
 
 // POST /login
-login.post('/login', (passport.authenticate('local', { session: false })), async (req, res) => {
-  if (req.user) {
-    res.cookie('jwt', req.user, { maxAge: 900000 })
-    res.redirect('/login-route')
-  } else {
-    res.redirect('/login')
-  }
+login.post('/login', (passport.authenticate('local', { session: false })), setJWTFromUser, requireLoggedIn, async (req, res) => {
+  res.redirect('/login-route')
+})
+
+// GET /login/patreon
+// GET /connect/patreon
+const patreonLoginPaths = ['/login/patreon', '/connect/patreon']
+login.get(patreonLoginPaths, passport.authenticate('patreon'))
+
+// GET /login/patreon/callback
+// GET /connect/patreon/callback
+const patreonCallbackPaths = ['/login/patreon/callback', '/connect/patreon/callback']
+login.get(patreonCallbackPaths, passport.authenticate('patreon', {  session: false }), setJWTFromUser, requireLoggedIn, async (req, res) => {
+  res.redirect('/dashboard')
 })
 
 // GET /login-route
