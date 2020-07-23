@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('includes/head', { meta }) %>
+  <body class="thefifthworld">
+    <%- include('includes/header', { member, showLogo: true }) %>
+    <main>
+      <section class="login">
+        <form action="/login" method="post">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" placeholder="you@example.com" />
+          <label for="passphrase">Passphrase</label>
+          <input type="text" name="passphrase" id="passphrase" placeholder="Whisper your secret passphrase" />
+          <p class="buttons">
+            <button>Log in</button>
+          </p>
+          <p class="note">
+            <a href="/forgot-passphrase">Forgot your passphrase?</a>
+          </p>
+        </form>
+        <div class="oauth2-login">
+          <p>Or login with&hellip;</p>
+          <ul>
+            <li><a href="/login/patreon" class="button patreon">Patreon</a></li>
+            <li><a href="/login/discord" class="button discord">Discord</a></li>
+            <li><a href="/login/google" class="button google">Google</a></li>
+            <li><a href="/login/facebook" class="button facebook">Facebook</a></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+    <%- include('includes/footer') %>
+  </body>
+</html>

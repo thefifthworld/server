@@ -1,16 +1,44 @@
-const config = require('./config')
-
 const express = require('express')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const passport = require('passport')
+
+const config = require('./config')
+const { initializePassport } = require('./auth')
+const {
+  initViewOpts,
+  verifyJWT,
+  renewJWT,
+  error404,
+  error500
+} = require('./universal-middlewares')
+
+const pub = require('./routes/public')
+const login = require('./routes/login')
+const members = require('./routes/members')
 
 const server = express()
 server.set('view engine', 'ejs')
-const router = express.Router()
+server.use(express.urlencoded({ extended: true }))
+server.use(bodyParser.json())
+server.use(cookieParser())
 
-server.use('/', router)
+// Set up Passport
+server.use(passport.initialize())
+server.use(passport.session())
+initializePassport(passport)
 
-router.get('/', async (req, res) => {
-  res.render('home')
-})
+server.use(initViewOpts)
+server.use(verifyJWT)
+server.use(renewJWT)
+
+server.use('/', login)
+server.use('/', members)
+server.use('/', pub)
+
+// Error handling
+server.use(error404)
+server.use(error500)
 
 const { port } = config
 server.listen(port, () => {

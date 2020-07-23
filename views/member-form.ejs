@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('includes/head', { meta }) %>
+  <body class="thefifthworld">
+    <%- include('includes/header', { member }) %>
+    <main>
+      <h1>Update Your Profile</h1>
+      <form action="/member" method="POST">
+        <input type="hidden" name="id" value="<%= profile.id %>" />
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="<%= profile.name %>" placeholder="What would you like us to call you?" />
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="<%= profile.email %>" placeholder="you@example.com" />
+        <aside>
+          <p>A long, memorable phrase, like a sentence, can provide more security than an arcane string of random letters and numbers that you’ll have a hard time remembering. That’s why we ask for a pass phrase. We also leave it open in plain text to make it easier for you to come up with and use a stronger one. You can probably check for someone looking over your shoulder more easily than you can check for hackers.</p>
+          <p>If you submit this form without providing anything here, your old passphrase will remain unchanged.</p>
+          <label for="passphrase">Passphrase</label>
+          <input type="text" id="passphrase" name="password" placeholder="Enter a secret passphrase" />
+        </aside>
+        <label for="bio">About</label>
+        <textarea id="bio" name="bio"><%= profile.bio.markdown %></textarea>
+        <h2>Links</h2>
+        <p>If you&rsquo;d like to make it easier for other people to find and follow you on social media or other networks, provide some links here. We&rsquo;ll show any that you provide on your profile. Any you choose not to share will simply not appear.</p>
+        <label for="facebook">Facebook</label>
+        <input type="url" id="facebook" name="facebook" value="<%= profile.links.facebook %>" placeholder="https://facebook.com/your-username-here" />
+        <label for="twitter">Twitter</label>
+        <input type="url" id="twitter" name="twitter" value="<%= profile.links.twitter %>" placeholder="https://twitter.com/your-username-here" />
+        <label for="github">GitHub</label>
+        <input type="url" id="github" name="github" value="<%= profile.links.github %>" placeholder="https://github.com/your-username-here" />
+        <label for="patreon">Patreon</label>
+        <input type="url" id="patreon" name="patreon" value="<%= profile.links.patreon %>" placeholder="https://patreon.com/your-username-here" />
+        <label for="web">Website</label>
+        <input type="url" id="web" name="web" value="<%= profile.links.web %>" placeholder="https://yourwebsite.com" />
+        <p class="buttons">
+          <button>Save</button>
+          <a href="/member/<%= profile.id %>" class="button secondary">Cancel</a>
+        </p>
+      </form>
+    </main>
+    <%- include('includes/footer') %>
+  </body>
+</html>

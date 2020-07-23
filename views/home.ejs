@@ -1,31 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>The Fifth World Design System: Stacks Template</title>
-    <link rel="icon" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/favicon.svg" />
-    <link rel=”mask-icon” href=”https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/favicon.svg” color=”#000000" />
-    <link rel="apple-touch-icon" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/apple-touch-icon.png" />
-    <link rel="stylesheet" media="all" href="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/v/1/0/0/style.css" crossorigin="" />
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta name="description" content="A design system for the Fifth World." />
-  </head>
+  <%- include('includes/head', { meta }) %>
   <body class="thefifthworld stack">
     <header class="home">
-      <nav class="personal">
-        <ul>
-          <li><a href="standard-loggedin.html">Log in</a></li>
-          <li><a href="#">How to Join</a></li>
-        </ul>
-      </nav>
+      <%- include('includes/personal-nav', { member }) %>
       <h1 class="logo">
         <a href="/">
           <img src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/img/wordmark.white.svg" alt="The Fifth World" />
         </a>
       </h1>
-      <p class="cta"><a href="#" class="cta button">Watch the Trailer</a></p>
+      <p class="cta"><a href="https://youtu.be/j0ke7eOhTJY" class="cta button">Watch the Trailer</a></p>
     </header>
     <section class="stack">
       <h1>Humanity thrives beyond civilization.</h1>
@@ -44,7 +28,7 @@
     </section>
     <section class="stack">
       <h1 class="project" data-intro="Our Project">An Open&nbsp;Source Shared&nbsp;Universe</h1>
-      <p><em>The Fifth World</em> presents an <a href="/about/open-source">open source</a> <a href="/about/shared-universe">shared universe</a> — a vision of a <a href="/about/neotribal">neotribal</a>, <a href="/about/ecotopian">ecotopian</a>, <a href="/about/animist-realist">animist realist</a> future created by a growing community of authors, artists, designers, gamers, and dreamers. We create the setting together here and explore it in <a href="/stories">stories</a>, <a href="/rpg">games</a>, <a href="/art">art</a>, and whatever other media you can imagine. We publish everything on this site under a <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US">Creative Commons Attribution-ShareAlike license</a>, so not only <em>can</em> you use it for your own creative projects. We can’t wait to see what you’ll create with it.</p>
+      <p><em>The Fifth World</em> presents an <a href="/about/open-source">open source</a> <a href="/about/shared-universe">shared universe</a> — a vision of a <a href="/about/neotribal">neotribal</a>, <a href="/about/ecotopian">ecotopian</a>, <a href="/about/animist-realist">animist realist</a> future created by a growing community of authors, artists, designers, gamers, and dreamers. We create the setting together here and explore it in <a href="/stories">stories</a>, <a href="/play">games</a>, <a href="/art">art</a>, and whatever other media you can imagine. We publish everything on this site under a <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US">Creative Commons Attribution-ShareAlike license</a>, so not only <em>can</em> you use it for your own creative projects. We can’t wait to see what you’ll create with it.</p>
       <p class="cta"><a href="/about/membership" class="button">How to Join</a></p>
     </section>
     <section class="stack highlight rpg">
@@ -56,30 +40,16 @@
     </section>
     <section class="stack">
       <p>Sign up to receive our monthly newsletter, featuring stories in and pieces on the Fifth World.</p>
-      <div class="input-button">
-        <input type="text" placeholder="you@example.com" id="input-button-example" />
-        <button>Subscribe</button>
-      </div>
+      <form action="https://thefifthworld.us19.list-manage.com/subscribe/post?u=16621fb5062428d5db0d4fbe4&id=88efe4bbc2" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form">
+        <div class="input-button">
+          <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="you@example.com" />
+          <div style="position:absolute;left:-5000px" aria-hidden="true">
+            <input type="text" name="b_16621fb5062428d5db0d4fbe4_88efe4bbc2" tabindex="-1" value="" />
+          </div>
+          <button value="Subscribe" name="subscribe" id="mc-embedded-subscribe">Subscribe</button>
+        </div>
+      </form>
     </section>
-    <nav class="site">
-      <ul>
-        <li class="explore"><a href="#">Explore</a></li>
-        <li class="hear"><a href="#">Hear</a></li>
-        <li class="see"><a href="#">See</a></li>
-        <li class="play"><a href="#">Play</a></li>
-      </ul>
-    </nav>
-    <footer>
-      <p><em>The Fifth World</em> exists thanks to the generosity of our supporters, partners, and friends on Patreon. <a href="https://www.patreon.com/thefifthworld">Would you like to join them and become part of our growing community?</a></p>
-      <p class="copyleft">
-        <span class="icons">
-          <img src="https://s3.amazonaws.com/thefifthworld/website/images/cc.svg" alt="Creative Commons" />
-          <img src="https://s3.amazonaws.com/thefifthworld/website/images/by.svg" alt="Attribution" />
-          <img src="https://s3.amazonaws.com/thefifthworld/website/images/sa.svg" alt="Share-Alike" />
-        </span>
-        <em>The Fifth World</em> is licensed under a <a href="http://creativecommons.org/licenses/by-sa/4.0/deed.en_US">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
-      </p>
-    </footer>
-    <script src="https://thefifthworld.s3.us-east-2.stackpathstorage.com/design/v/1/0/0/bundle.js"></script>
+    <%- include('includes/footer') %>
   </body>
 </html>
