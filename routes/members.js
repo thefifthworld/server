@@ -58,6 +58,7 @@ members.get('/dashboard', requireLoggedIn, async (req, res) => {
   req.viewOpts.updates = updates.data
 
   req.viewOpts.meta.title = 'Your Dashboard'
+  req.viewOpts.discordCode = config.discord.code
   res.render('dashboard', req.viewOpts)
 })
 

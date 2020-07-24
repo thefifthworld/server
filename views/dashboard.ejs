@@ -55,6 +55,29 @@
           <li><a disabled="" title="Coming soon" class="button">Upload Art</a></li>
         </ul>
       </section>
+
+      <!-- Your Membership -->
+      <section class="action-cols">
+        <h3>Your Membership</h3>
+        <ul>
+          <li>
+            <a href="/member/<%= member.id %>/edit" class="button">Your Profile</a>
+            <p>Update your name, email, and password, and decide what you want to share about your activity on the Fifth World.</p>
+          </li>
+          <li>
+            <a href="/connect" class="button">Connect</a>
+            <p>Connect other services like Facebook, Twitter, Patreon, Google, or Github, so you can use them to log in.</p
+          </li>
+          <li>
+            <a href="/invite" class="button">Invitations</a>
+            <p>Invite your friends to join the Fifth World, and see a list of all the members that you invited.</p>
+          </li>
+          <li>
+            <a href="https://discord.gg/<%= discordCode %>" class="button">Chat</a>
+            <p>Join the Fifth World Discord server to chat with other members.</p>
+          </li>
+        </ul>
+      </section>
     </main>
     <%- include('includes/footer') %>
   </body>
