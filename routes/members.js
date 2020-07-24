@@ -65,7 +65,7 @@ members.get('/dashboard', requireLoggedIn, async (req, res) => {
 // GET /connect
 members.get('/connect', requireLoggedIn, async (req, res) => {
   const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
-  const providers = await axios.get(`${config.api.root}/members/auths`, opts)
+  const providers = await axios.get(`${config.api.root}/members/providers`, opts)
   req.viewOpts.meta.title = 'Connect Other Login Services'
   req.viewOpts.providers = providers.data
   res.render('connect', req.viewOpts)
