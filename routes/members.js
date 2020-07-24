@@ -51,4 +51,15 @@ members.post('/member', requireLoggedIn, async (req, res) => {
   }
 })
 
+// GET /dashboard
+members.get('/dashboard', requireLoggedIn, async (req, res) => {
+  const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
+  const updates = await axios.get(`${config.api.root}/updates`, opts)
+  req.viewOpts.updates = updates.data
+
+  req.viewOpts.meta.title = 'Your Dashboard'
+  req.viewOpts.discordCode = config.discord.code
+  res.render('dashboard', req.viewOpts)
+})
+
 module.exports = members
