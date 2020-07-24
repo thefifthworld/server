@@ -4,7 +4,42 @@
   <body class="thefifthworld">
     <%- include('includes/header', { member, showLogo: true }) %>
     <main>
-      <h1>Dashboard</h1>
+      <h2>Recent Updates</h2>
+      <table class="updates">
+        <tbody>
+          <% for (const update of updates) { %>
+          <tr>
+            <td>
+              <a href="<%= update.path %>">
+                <%= update.title %>
+                <span class="path"><%= update.path %></span>
+              </a>
+            </td>
+            <td>
+              <%
+                const monthAbbrs = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
+                const time = new Date(update.timestamp * 1000)
+                const yr = time.getFullYear()
+                const mo = time.getMonth() + 1
+                const dy = time.getDate()
+                const hr24 = time.getHours()
+                const hr12 = hr24 === 0 ? 12 : hr24 > 12 ? hr24 - 12 : hr24
+                const ampm = hr24 > 11 ? 'PM' : 'AM'
+                const mn = `${time.getMinutes()}`.padStart(2, '0')
+                const pmo = `${mo}`.padStart(2, '0')
+                const pdy = `${dy}`.padStart(2, '0')
+                const phr = `${hr24}`.padStart(2, '0')
+                const timestamp = `${yr}-${pmo}-${pdy} ${phr}:${mn}`
+                const hdate = `${dy} ${monthAbbrs[time.getMonth()]} ${yr} ${hr12}:${mn} ${ampm}`
+              %>
+              <time datetime="<%= timestamp %>">
+                <%= hdate %>
+              </time>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
     </main>
     <%- include('includes/footer') %>
   </body>
