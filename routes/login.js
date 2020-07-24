@@ -84,12 +84,6 @@ login.get('/login-route', requireLoggedIn, async (req, res) => {
   }
 })
 
-// GET /dashboard
-login.get('/dashboard', requireLoggedIn, async (req, res) => {
-  req.viewOpts.meta.title = 'Your Dashboard'
-  res.render('dashboard', req.viewOpts)
-})
-
 // GET /logout
 login.get('/logout', async (req, res) => {
   res.cookie('jwt', '', { maxAge: 0 })

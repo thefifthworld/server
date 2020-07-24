@@ -4,7 +4,80 @@
   <body class="thefifthworld">
     <%- include('includes/header', { member, showLogo: true }) %>
     <main>
-      <h1>Dashboard</h1>
+      <h2>Recent Updates</h2>
+      <table class="updates">
+        <tbody>
+          <% for (const update of updates) { %>
+          <tr>
+            <td>
+              <a href="<%= update.path %>">
+                <%= update.title %>
+                <span class="path"><%= update.path %></span>
+              </a>
+            </td>
+            <td>
+              <%
+                const monthAbbrs = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
+                const time = new Date(update.timestamp * 1000)
+                const yr = time.getFullYear()
+                const mo = time.getMonth() + 1
+                const dy = time.getDate()
+                const hr24 = time.getHours()
+                const hr12 = hr24 === 0 ? 12 : hr24 > 12 ? hr24 - 12 : hr24
+                const ampm = hr24 > 11 ? 'PM' : 'AM'
+                const mn = `${time.getMinutes()}`.padStart(2, '0')
+                const pmo = `${mo}`.padStart(2, '0')
+                const pdy = `${dy}`.padStart(2, '0')
+                const phr = `${hr24}`.padStart(2, '0')
+                const timestamp = `${yr}-${pmo}-${pdy} ${phr}:${mn}`
+                const hdate = `${dy} ${monthAbbrs[time.getMonth()]} ${yr} ${hr12}:${mn} ${ampm}`
+              %>
+              <time datetime="<%= timestamp %>">
+                <%= hdate %>
+              </time>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+
+      <!-- Create something -->
+      <section class="create">
+        <h3>Create Something</h3>
+        <p>Add something new to the Fifth World.</p>
+        <ul>
+          <li><a href="/new" class="button">Add a Page</a></li>
+          <li><a disabled="" title="Coming soon" class="button">Add a Family</a></li>
+          <li><a disabled="" title="Coming soon" class="button">Add a Character</a></li>
+          <li><a disabled="" title="Coming soon" class="button">Add a Place</a></li>
+          <li><a disabled="" title="Coming soon" class="button">Write a Story</a></li>
+          <li><a href="/upload" class="button">Upload a File</a></li>
+          <li><a disabled="" title="Coming soon" class="button">Upload Art</a></li>
+        </ul>
+      </section>
+
+      <!-- Your Membership -->
+      <section class="action-cols">
+        <h3>Your Membership</h3>
+        <ul>
+          <li>
+            <a href="/member/<%= member.id %>/edit" class="button">Your Profile</a>
+            <p>Update your name, email, and password, and decide what you want to share about your activity on the Fifth World.</p>
+          </li>
+          <li>
+            <a href="/connect" class="button">Connect</a>
+            <p>Connect other services like Facebook, Twitter, Patreon, Google, or Github, so you can use them to log in.</p
+          </li>
+          <li>
+            <a href="/invite" class="button">Invitations</a>
+            <p>Invite your friends to join the Fifth World, and see a list of all the members that you invited.</p>
+          </li>
+          <li>
+            <a href="https://discord.gg/<%= discordCode %>" class="button">Chat</a>
+            <p>Join the Fifth World Discord server to chat with other members.</p>
+          </li>
+        </ul>
+      </section>
     </main>
     <%- include('includes/footer') %>
   </body>
