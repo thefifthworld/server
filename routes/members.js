@@ -51,4 +51,10 @@ members.post('/member', requireLoggedIn, async (req, res) => {
   }
 })
 
+// GET /dashboard
+members.get('/dashboard', requireLoggedIn, async (req, res) => {
+  req.viewOpts.meta.title = 'Your Dashboard'
+  res.render('dashboard', req.viewOpts)
+})
+
 module.exports = members
