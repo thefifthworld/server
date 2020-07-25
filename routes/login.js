@@ -2,6 +2,7 @@ const express = require('express')
 const passport = require('passport')
 const login = express.Router()
 const { requireLoggedIn } = require('../auth')
+const options = { session: false, failureRedirect: '/login' }
 
 /**
  * Express.js middleware that can take the user from Passport.js and save it to
@@ -23,7 +24,7 @@ login.get('/login', async (req, res) => {
 })
 
 // POST /login
-login.post('/login', (passport.authenticate('local', { session: false })), setJWTFromUser, requireLoggedIn, async (req, res) => {
+login.post('/login', (passport.authenticate('local', options)), setJWTFromUser, requireLoggedIn, async (req, res) => {
   res.redirect('/login-route')
 })
 
@@ -35,7 +36,7 @@ login.get(patreonLoginPaths, passport.authenticate('patreon'))
 // GET /login/patreon/callback
 // GET /connect/patreon/callback
 const patreonCallbackPaths = ['/login/patreon/callback', '/connect/patreon/callback']
-login.get(patreonCallbackPaths, passport.authenticate('patreon', {  session: false }), setJWTFromUser, requireLoggedIn, async (req, res) => {
+login.get(patreonCallbackPaths, passport.authenticate('patreon', options), setJWTFromUser, requireLoggedIn, async (req, res) => {
   res.redirect('/dashboard')
 })
 
@@ -47,7 +48,7 @@ login.get(discordLoginPaths, passport.authenticate('discord', { scope: [ 'identi
 // GET /login/discord/callback
 // GET /connect/discord/callback
 const discordCallbackPaths = ['/login/discord/callback', '/connect/discord/callback']
-login.get(discordCallbackPaths, passport.authenticate('discord', {  session: false }), setJWTFromUser, requireLoggedIn, async (req, res) => {
+login.get(discordCallbackPaths, passport.authenticate('discord', options), setJWTFromUser, requireLoggedIn, async (req, res) => {
   res.redirect('/dashboard')
 })
 
@@ -59,7 +60,7 @@ login.get(googleLoginPaths, passport.authenticate('google', { scope: [ 'email', 
 // GET /login/google/callback
 // GET /connect/google/callback
 const googleCallbackPaths = ['/login/google/callback', '/connect/google/callback']
-login.get(googleCallbackPaths, passport.authenticate('google', {  session: false }), setJWTFromUser, requireLoggedIn, async (req, res) => {
+login.get(googleCallbackPaths, passport.authenticate('google', options), setJWTFromUser, requireLoggedIn, async (req, res) => {
   res.redirect('/dashboard')
 })
 
@@ -71,7 +72,7 @@ login.get(facebookLoginPaths, passport.authenticate('facebook', { scope: [ 'emai
 // GET /login/facebook/callback
 // GET /connect/facebook/callback
 const facebookCallbackPaths = ['/login/facebook/callback', '/connect/facebook/callback']
-login.get(facebookCallbackPaths, passport.authenticate('facebook', {  session: false }), setJWTFromUser, requireLoggedIn, async (req, res) => {
+login.get(facebookCallbackPaths, passport.authenticate('facebook', options), setJWTFromUser, requireLoggedIn, async (req, res) => {
   res.redirect('/dashboard')
 })
 

@@ -21,13 +21,17 @@ const config = require('./config')
 const handleAuth = async (provider, id, token, jwt, done) => {
   if (jwt && provider && id) {
     const opts = { headers: { Authorization: `Bearer ${jwt}` } }
-    const res = await axios.post(`${config.api.root}/members/providers`, { provider, id, token }, opts)
+    await axios.post(`${config.api.root}/members/providers`, { provider, id, token }, opts)
     return done(null, jwt)
   } else if (provider && id) {
-    const res = await axios.post(`${config.api.root}/members/auth`, { provider, id })
-    if (res && res.status === 200) return done(null, res.data)
+    try {
+      const res = await axios.post(`${config.api.root}/members/auth`, { provider, id })
+      if (res && res.status === 200) return done(null, res.data)
+    } catch (err) {
+      return done(null, false, err)
+    }
   }
-  return done('Unauthorized')
+  return done(null, false, 'Unauthorized')
 }
 
 /**
@@ -49,7 +53,6 @@ const initializePassport = passport => {
         ? done(null, res.data)
         : done(null, false, errmsg)
     } catch (err) {
-      console.error(err)
       done(null, false, errmsg)
     }
   }))
