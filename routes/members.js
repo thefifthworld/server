@@ -71,4 +71,11 @@ members.get('/connect', requireLoggedIn, async (req, res) => {
   res.render('connect', req.viewOpts)
 })
 
+// GET /disconnect/:provider
+members.get('/disconnect/:provider', requireLoggedIn, async (req, res) => {
+  const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
+  await axios.delete(`${config.api.root}/members/providers/${req.params.provider}`, opts)
+  res.redirect('/connect')
+})
+
 module.exports = members
