@@ -29,10 +29,10 @@
         <td><%= services[slug] %></td>
         <% if (providers.includes(slug)) { %>
         <td>Connected</td>
-        <td class="short"><a href="/disconnect/<%= slug %>" class="button">Disconnect</a></td>
+        <td class="actions"><a href="/disconnect/<%= slug %>" class="button">Disconnect</a></td>
         <% } else { %>
         <td>Not connected</td>
-        <td class="short"><a href="/connect/<%= slug %>" class="button">Connect</a></td>
+        <td class="actions"><a href="/connect/<%= slug %>" class="button">Connect</a></td>
         <% } %>
       </tr>
       <% }) %>
