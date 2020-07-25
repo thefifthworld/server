@@ -70,9 +70,10 @@ const renewJWT = async (req, res, next) => {
  * requested page could not be found.
  * @param req {Object} - The Express.js request object.
  * @param res {Object} - The Express.js response object.
+ * @param next {function} - The next function to be called.
  */
 
-const error404 = (req, res) => {
+const error404 = (req, res, next) => {
   req.viewOpts.meta.antisocial = true
   res.status(404).render('errors/e404', req.viewOpts)
 }
@@ -80,11 +81,13 @@ const error404 = (req, res) => {
 /**
  * A universal middleware for Express.js that handles the case when an error is
  * encountered.
+ * @param err {Object} - An error object.
  * @param req {Object} - The Express.js request object.
  * @param res {Object} - The Express.js response object.
+ * @param next {function} - The next function to be called.
  */
 
-const error500 = (err, req, res) => {
+const error500 = (err, req, res, next) => {
   console.error(err)
   req.viewOpts.meta.antisocial = true
   res.status(500).render('errors/e500', req.viewOpts)

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('includes/head', { meta }) %>
+<body class="thefifthworld">
+<%- include('includes/header', { member }) %>
+<main>
+  <nav class="breadcrumbs">
+    <ul class="breadcrumbs">
+      <li><a href="/dashboard">Dashboard</a></li>
+      <li class="current">Connect</li>
+    </ul>
+  </nav>
+  <h1>Connect Login Providers</h1>
+  <p>If you use any of these services or networks, you can connect your account there to your Fifth World membership so that you can use them to log in next time.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Status</th>
+        <th />
+      </tr>
+    </thead>
+    <tbody>
+      <%
+        const services = { patreon: 'Patreon', discord: 'Discord', google: 'Google', facebook: 'Facebook' }
+        Object.keys(services).forEach(slug => {
+      %>
+      <tr>
+        <td><%= services[slug] %></td>
+        <% if (providers.includes(slug)) { %>
+        <td>Connected</td>
+        <td class="actions"><a href="/disconnect/<%= slug %>" class="button">Disconnect</a></td>
+        <% } else { %>
+        <td>Not connected</td>
+        <td class="actions"><a href="/connect/<%= slug %>" class="button">Connect</a></td>
+        <% } %>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</main>
+<%- include('includes/footer') %>
+</body>
+</html>

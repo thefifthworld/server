@@ -62,4 +62,20 @@ members.get('/dashboard', requireLoggedIn, async (req, res) => {
   res.render('dashboard', req.viewOpts)
 })
 
+// GET /connect
+members.get('/connect', requireLoggedIn, async (req, res) => {
+  const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
+  const providers = await axios.get(`${config.api.root}/members/providers`, opts)
+  req.viewOpts.meta.title = 'Connect Other Login Services'
+  req.viewOpts.providers = providers.data
+  res.render('connect', req.viewOpts)
+})
+
+// GET /disconnect/:provider
+members.get('/disconnect/:provider', requireLoggedIn, async (req, res) => {
+  const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
+  await axios.delete(`${config.api.root}/members/providers/${req.params.provider}`, opts)
+  res.redirect('/connect')
+})
+
 module.exports = members
