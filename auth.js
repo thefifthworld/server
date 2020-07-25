@@ -12,17 +12,17 @@ const config = require('./config')
  *   `patreon`, `github`, `facebook`, or `twitter`).
  * @param id {?string} - The OAuth 2.0 token ID.
  * @param token {?string} - The OAuth 2.0 token secret.
- * @param user {?string} - The JSON Web Token of the currently logged-in user.
+ * @param jwt {?string} - The JSON Web Token of the currently logged-in user.
  * @param done {function} - The callback function.
  * @returns {Promise} - A Promise that resolves when the OAuth 2.0 token has
  *   been authorized, saved to the API, or rejected.
  */
 
-const handleAuth = async (provider, id, token, user, done) => {
-  if (user && provider && id) {
-    const opts = { headers: { Authorization: `Bearer ${user}` } }
-    await axios.post(`${config.api.root}/members/add-auth`, { provider, id, token }, opts)
-    return done(null, user)
+const handleAuth = async (provider, id, token, jwt, done) => {
+  if (jwt && provider && id) {
+    const opts = { headers: { Authorization: `Bearer ${jwt}` } }
+    const res = await axios.post(`${config.api.root}/members/providers`, { provider, id, token }, opts)
+    return done(null, jwt)
   } else if (provider && id) {
     const res = await axios.post(`${config.api.root}/members/auth`, { provider, id })
     if (res && res.status === 200) return done(null, res.data)
@@ -60,7 +60,7 @@ const initializePassport = passport => {
     callbackURL: config.patreon.callback,
     passReqToCallback: true
   }, async (req, token, secret, profile, done) => {
-    return handleAuth('patreon', profile.id, token, req.user, done)
+    return handleAuth('patreon', profile.id, token, req.cookies.jwt, done)
   }))
 
   passport.use(new DiscordStrategy({
@@ -69,7 +69,7 @@ const initializePassport = passport => {
     callbackURL: config.discord.callback,
     passReqToCallback: true
   }, async (req, token, secret, profile, done) => {
-    return handleAuth('discord', profile.id, token, req.user, done)
+    return handleAuth('discord', profile.id, token, req.cookies.jwt, done)
   }))
 
   passport.use(new GoogleStrategy({
@@ -78,7 +78,7 @@ const initializePassport = passport => {
     callbackURL: config.google.callback,
     passReqToCallback: true
   }, async (req, token, secret, profile, done) => {
-    return handleAuth('google', profile.id, token, req.user, done)
+    return handleAuth('google', profile.id, token, req.cookies.jwt, done)
   }))
 
   passport.use(new FacebookStrategy({
@@ -87,7 +87,7 @@ const initializePassport = passport => {
     callbackURL: config.facebook.callback,
     passReqToCallback: true
   }, async (req, token, secret, profile, done) => {
-    return handleAuth('facebook', profile.id, token, req.user, done)
+    return handleAuth('facebook', profile.id, token, req.cookies.jwt, done)
   }))
 }
 
