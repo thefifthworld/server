@@ -112,6 +112,11 @@ login.get('/join', (req, res) => {
   res.render('join', req.viewOpts)
 })
 
+// POST /join
+login.post('/join', async (req, res) => {
+  await acceptInvitation(req.body.code, res)
+})
+
 // GET /join/:code
 login.get('/join/:code', async (req, res) => {
   await acceptInvitation(req.params.code, res)
