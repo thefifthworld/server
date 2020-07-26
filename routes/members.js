@@ -7,7 +7,6 @@ const config = require('../config')
 // GET /welcome
 members.get('/welcome', requireLoggedIn, async (req, res, next) => {
   const resp = await callAPI('GET', `/members/${req.user.id}`)
-  console.log(resp)
   if (resp && resp.status === 200) {
     req.viewOpts.profile = resp.data
     req.viewOpts.welcome = true
