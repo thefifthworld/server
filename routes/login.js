@@ -1,6 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const login = express.Router()
+const callAPI = require('../api')
 const { requireLoggedIn } = require('../auth')
 const options = { session: false, failureRedirect: '/login' }
 
@@ -15,6 +16,26 @@ const options = { session: false, failureRedirect: '/login' }
 const setJWTFromUser = (req, res, next) => {
   if (req.user) res.cookie('jwt', req.user, { maxAge: 900000 })
   next()
+}
+
+/**
+ * Method for accepting an invitation.
+ * @param code {string} - The inviation code.
+ * @param res {Object} - The Express.js response object.
+ * @returns {Promise<void>} - A Promise that resolves when the invitation has
+ *   been accepted, the JSON Web Token has been saved as a cookie, and the new
+ *   member has been redirected to the welcome page, or by redirecting the
+ *   user to the join form if the invitation was not accepted.
+ */
+
+const acceptInvitation = async (code, res) => {
+  try {
+    const accept = await callAPI('POST', `/invitations/${code}`)
+    res.cookie('jwt', accept.data, { maxAge: 900000 })
+    res.redirect('/welcome')
+  } catch (err) {
+    res.redirect('/join')
+  }
 }
 
 // GET /login
@@ -83,6 +104,22 @@ login.get('/login-route', requireLoggedIn, async (req, res) => {
   } else if (req.user) {
     res.redirect('/dashboard')
   }
+})
+
+// GET /join
+login.get('/join', (req, res) => {
+  req.viewOpts.meta.title = 'Join'
+  res.render('join', req.viewOpts)
+})
+
+// POST /join
+login.post('/join', async (req, res) => {
+  await acceptInvitation(req.body.code, res)
+})
+
+// GET /join/:code
+login.get('/join/:code', async (req, res) => {
+  await acceptInvitation(req.params.code, res)
 })
 
 // GET /logout
