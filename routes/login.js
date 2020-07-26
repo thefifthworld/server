@@ -29,11 +29,11 @@ const setJWTFromUser = (req, res, next) => {
  */
 
 const acceptInvitation = async (code, res) => {
-  const accept = await callAPI('POST', `/invitations/${code}`)
-  if (accept.status === 200) {
+  try {
+    const accept = await callAPI('POST', `/invitations/${code}`)
     res.cookie('jwt', accept.data, { maxAge: 900000 })
     res.redirect('/welcome')
-  } else {
+  } catch (err) {
     res.redirect('/join')
   }
 }
