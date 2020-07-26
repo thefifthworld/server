@@ -77,6 +77,13 @@ members.get('/invite', requireLoggedIn, async (req, res) => {
   res.render('invite', req.viewOpts)
 })
 
+// POST /invite
+members.post('/invite', requireLoggedIn, async (req, res) => {
+  const emails = req.body.invitations.split('\n').map(email => email.trim())
+  await callAPI('POST', '/invitations/send', req.cookies.jwt, { emails })
+  res.redirect('/invite')
+})
+
 // GET /disconnect/:provider
 members.get('/disconnect/:provider', requireLoggedIn, async (req, res) => {
   await callAPI('DELETE', `/members/providers/${req.params.provider}`, req.cookies.jwt)
