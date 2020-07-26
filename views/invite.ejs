@@ -36,6 +36,21 @@
         </tbody>
       </table>
       <% } %>
+      <% if (invitations === 'Infinite' || invitations > 0) { %>
+      <%
+        const num = invitations === 'Infinite'
+          ? 'As an administrator, you can send invitations to as many people as you like.'
+          : `You can send invitations to up to <strong>${invitations}</strong> more people.`
+      %>
+      <h2>Send Invitations</h2>
+      <p><%= num %>  Enter each email address on a separate line.</p>
+      <form action="/invite" method="POST">
+        <textarea name="invitations" placeholder="someone@example.com"></textarea>
+        <p class="buttons">
+          <button>Send Invitations</button>
+        </p>
+      </form>
+      <% } %>
     </main>
     <%- include('includes/footer') %>
   </body>
