@@ -1,6 +1,6 @@
-const axios = require('axios')
 const express = require('express')
 const members = express.Router()
+const callAPI = require('../api')
 const { requireLoggedIn } = require('../auth')
 const config = require('../config')
 
@@ -13,7 +13,7 @@ members.get('/welcome', requireLoggedIn, async (req, res) => {
 
 // GET /members/:id
 members.get('/member/:id', async (req, res, next) => {
-  const resp = await axios.get(`${config.api.root}/members/${req.params.id}`)
+  const resp = await callAPI('GET', `/members/${req.params.id}`)
   if (resp && resp.status === 200) {
     req.viewOpts.profile = resp.data
     if (resp.data && resp.data.links) {
@@ -29,7 +29,7 @@ members.get('/member/:id', async (req, res, next) => {
 // GET /members/:id/edit
 members.get('/member/:id/edit', async (req, res, next) => {
   if (req.user && (req.user === req.params.id || req.user.admin)) {
-    const resp = await axios.get(`${config.api.root}/members/${req.params.id}`)
+    const resp = await callAPI('GET', `/members/${req.params.id}`)
     if (resp && resp.status === 200) {
       req.viewOpts.profile = resp.data
       return res.render('member-form', req.viewOpts)
@@ -45,16 +45,14 @@ members.post('/member', requireLoggedIn, async (req, res) => {
     const updates = JSON.parse(JSON.stringify(req.body))
     if (updates.email.length === 0) delete updates.email
     if (updates.password.length === 0) delete updates.password
-    const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
-    await axios.patch(`${config.api.root}/members/${id}`, updates, opts)
+    await callAPI('PATCH', `/members/${id}`, req.cookies.jwt, updates)
     return res.redirect(`/member/${id}`)
   }
 })
 
 // GET /dashboard
 members.get('/dashboard', requireLoggedIn, async (req, res) => {
-  const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
-  const updates = await axios.get(`${config.api.root}/updates`, opts)
+  const updates = await callAPI('GET', '/updates', req.cookies.jwt)
   req.viewOpts.updates = updates.data
 
   req.viewOpts.meta.title = 'Your Dashboard'
@@ -64,8 +62,7 @@ members.get('/dashboard', requireLoggedIn, async (req, res) => {
 
 // GET /connect
 members.get('/connect', requireLoggedIn, async (req, res) => {
-  const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
-  const providers = await axios.get(`${config.api.root}/members/providers`, opts)
+  const providers = await callAPI('GET', '/members/providers', req.cookies.jwt)
   req.viewOpts.meta.title = 'Connect Other Login Services'
   req.viewOpts.providers = providers.data
   res.render('connect', req.viewOpts)
@@ -73,8 +70,7 @@ members.get('/connect', requireLoggedIn, async (req, res) => {
 
 // GET /disconnect/:provider
 members.get('/disconnect/:provider', requireLoggedIn, async (req, res) => {
-  const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
-  await axios.delete(`${config.api.root}/members/providers/${req.params.provider}`, opts)
+  await callAPI('DELETE', `/members/providers/${req.params.provider}`, req.cookies.jwt)
   res.redirect('/connect')
 })
 

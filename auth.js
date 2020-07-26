@@ -1,9 +1,9 @@
-const axios = require('axios')
 const LocalStrategy = require('passport-local').Strategy
 const PatreonStrategy = require('passport-patreon').Strategy
 const DiscordStrategy = require('passport-discord').Strategy
 const GoogleStrategy = require('passport-google-oauth2').Strategy
 const FacebookStrategy = require('passport-facebook').Strategy
+const callAPI = require('./api')
 const config = require('./config')
 
 /**
@@ -20,12 +20,11 @@ const config = require('./config')
 
 const handleAuth = async (provider, id, token, jwt, done) => {
   if (jwt && provider && id) {
-    const opts = { headers: { Authorization: `Bearer ${jwt}` } }
-    await axios.post(`${config.api.root}/members/providers`, { provider, id, token }, opts)
+    await callAPI('POST', '/members/providers', jwt, { provider, id, token })
     return done(null, jwt)
   } else if (provider && id) {
     try {
-      const res = await axios.post(`${config.api.root}/members/auth`, { provider, id })
+      const res = await callAPI('POST', '/members/auth', null, { provider, id })
       if (res && res.status === 200) return done(null, res.data)
     } catch (err) {
       return done(null, false, err)
@@ -48,7 +47,7 @@ const initializePassport = passport => {
   async (email, pass, done) => {
     const errmsg = 'Email/passphrase not found'
     try {
-      const res = await axios.post(`${config.api.root}/members/auth`, { email, pass })
+      const res = await callAPI('POST', '/members/auth', null, { email, pass })
       return res.status === 200
         ? done(null, res.data)
         : done(null, false, errmsg)
