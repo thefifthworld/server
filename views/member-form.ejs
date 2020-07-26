@@ -4,19 +4,29 @@
   <body class="thefifthworld">
     <%- include('includes/header', { member }) %>
     <main>
-      <h1>Update Your Profile</h1>
+      <h1><%= welcome ? 'Welcome to the Fifth World!' : 'Update Your Profile' %></h1>
       <form action="/member" method="POST">
+        <% if (welcome) { %>
+        <p>Welcome to the Fifth World! Please tell us a little bit about yourself. At the very least, please choose a <strong>passphrase</strong> so you can log back in next time.</p>
+        <label for="passphrase">Passphrase</label>
+        <input type="text" id="passphrase" name="password" placeholder="Enter a secret passphrase" />
+        <aside>
+          <p>A long, memorable phrase, like a sentence, can provide more security than an arcane string of random letters and numbers that you’ll have a hard time remembering. That’s why we ask for a pass phrase. We also leave it open in plain text to make it easier for you to come up with and use a stronger one. You can probably check for someone looking over your shoulder more easily than you can check for hackers.</p>
+        </aside>
+        <% } %>
         <input type="hidden" name="id" value="<%= profile.id %>" />
         <label for="name">Name</label>
         <input type="text" id="name" name="name" value="<%= profile.name %>" placeholder="What would you like us to call you?" />
         <label for="email">Email</label>
         <input type="email" id="email" name="email" value="<%= profile.email %>" placeholder="you@example.com" />
+        <% if (!welcome) { %>
         <aside>
           <p>A long, memorable phrase, like a sentence, can provide more security than an arcane string of random letters and numbers that you’ll have a hard time remembering. That’s why we ask for a pass phrase. We also leave it open in plain text to make it easier for you to come up with and use a stronger one. You can probably check for someone looking over your shoulder more easily than you can check for hackers.</p>
           <p>If you submit this form without providing anything here, your old passphrase will remain unchanged.</p>
           <label for="passphrase">Passphrase</label>
           <input type="text" id="passphrase" name="password" placeholder="Enter a secret passphrase" />
         </aside>
+        <% } %>
         <label for="bio">About</label>
         <textarea id="bio" name="bio"><%= profile.bio.markdown %></textarea>
         <h2>Links</h2>
