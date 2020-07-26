@@ -5,10 +5,17 @@ const { requireLoggedIn } = require('../auth')
 const config = require('../config')
 
 // GET /welcome
-members.get('/welcome', requireLoggedIn, async (req, res) => {
-  req.viewOpts.welcome = true
-  req.viewOpts.meta.title = 'Set Up Your Profile'
-  res.render('member-form', req.viewOpts)
+members.get('/welcome', requireLoggedIn, async (req, res, next) => {
+  const resp = await callAPI('GET', `/members/${req.user.id}`)
+  console.log(resp)
+  if (resp && resp.status === 200) {
+    req.viewOpts.profile = resp.data
+    req.viewOpts.welcome = true
+    req.viewOpts.meta.title = 'Set Up Your Profile'
+    res.render('member-form', req.viewOpts)
+  } else {
+    next('Couldn\'t load profile of person on /welcome')
+  }
 })
 
 // GET /members/:id
