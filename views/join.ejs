@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('includes/head', { meta }) %>
+  <body class="thefifthworld">
+    <%- include('includes/header', { member }) %>
+    <main>
+      <h1>Join the Fifth World</h1>
+      <form action="/join" method="POST">
+        <label for="code">Invitation code</label>
+        <input type="text" id="code" name="code" placeholder="abc123xyz89" />
+        <button>Join</button>
+      </form>
+      <p><strong>Don&rsquo;t have an invitation?</strong> You can read more about <a href="/about/membership">why we made the Fifth World invitation-only, and how you can get one</a>.</p>
+    </main>
+    <%- include('includes/footer') %>
+  </body>
+</html>
