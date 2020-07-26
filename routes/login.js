@@ -106,6 +106,12 @@ login.get('/login-route', requireLoggedIn, async (req, res) => {
   }
 })
 
+// GET /join
+login.get('/join', (req, res) => {
+  req.viewOpts.meta.title = 'Join'
+  res.render('join', req.viewOpts)
+})
+
 // GET /join/:code
 login.get('/join/:code', async (req, res) => {
   await acceptInvitation(req.params.code, res)
