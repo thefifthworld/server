@@ -68,6 +68,15 @@ members.get('/connect', requireLoggedIn, async (req, res) => {
   res.render('connect', req.viewOpts)
 })
 
+// GET /invite
+members.get('/invite', requireLoggedIn, async (req, res) => {
+  const invited = await callAPI('GET', '/members/invited', req.cookies.jwt)
+  req.viewOpts.meta.title = 'Invitations'
+  req.viewOpts.invited = invited.data
+  req.viewOpts.invitations = req.user.admin ? 'Infinite' : req.user.invitations
+  res.render('invite', req.viewOpts)
+})
+
 // GET /disconnect/:provider
 members.get('/disconnect/:provider', requireLoggedIn, async (req, res) => {
   await callAPI('DELETE', `/members/providers/${req.params.provider}`, req.cookies.jwt)
