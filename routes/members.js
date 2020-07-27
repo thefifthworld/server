@@ -1,7 +1,7 @@
 const express = require('express')
 const members = express.Router()
 const callAPI = require('../api')
-const { requireLoggedIn } = require('../auth')
+const { requireLoggedIn, checkMessages } = require('../auth')
 const config = require('../config')
 
 // GET /welcome
@@ -18,7 +18,7 @@ members.get('/welcome', requireLoggedIn, async (req, res, next) => {
 })
 
 // GET /members/:id
-members.get('/member/:id', async (req, res, next) => {
+members.get('/member/:id', checkMessages, async (req, res, next) => {
   const resp = await callAPI('GET', `/members/${req.params.id}`)
   if (resp && resp.status === 200) {
     req.viewOpts.profile = resp.data
@@ -33,11 +33,12 @@ members.get('/member/:id', async (req, res, next) => {
 })
 
 // GET /members/:id/edit
-members.get('/member/:id/edit', async (req, res, next) => {
+members.get('/member/:id/edit', checkMessages, async (req, res, next) => {
   if (req.user && (req.user === req.params.id || req.user.admin)) {
     const resp = await callAPI('GET', `/members/${req.params.id}`)
     if (resp && resp.status === 200) {
       req.viewOpts.profile = resp.data
+      req.viewOpts.welcome = false
       return res.render('member-form', req.viewOpts)
     }
   }
@@ -57,7 +58,7 @@ members.post('/member', requireLoggedIn, async (req, res) => {
 })
 
 // GET /dashboard
-members.get('/dashboard', requireLoggedIn, async (req, res) => {
+members.get('/dashboard', requireLoggedIn, checkMessages, async (req, res) => {
   const updates = await callAPI('GET', '/updates', req.cookies.jwt)
   req.viewOpts.updates = updates.data
 
@@ -67,7 +68,7 @@ members.get('/dashboard', requireLoggedIn, async (req, res) => {
 })
 
 // GET /connect
-members.get('/connect', requireLoggedIn, async (req, res) => {
+members.get('/connect', requireLoggedIn, checkMessages, async (req, res) => {
   const providers = await callAPI('GET', '/members/providers', req.cookies.jwt)
   req.viewOpts.meta.title = 'Connect Other Login Services'
   req.viewOpts.providers = providers.data
@@ -75,7 +76,7 @@ members.get('/connect', requireLoggedIn, async (req, res) => {
 })
 
 // GET /invite
-members.get('/invite', requireLoggedIn, async (req, res) => {
+members.get('/invite', requireLoggedIn, checkMessages, async (req, res) => {
   const invited = await callAPI('GET', '/members/invited', req.cookies.jwt)
   req.viewOpts.meta.title = 'Invitations'
   req.viewOpts.invited = invited.data
