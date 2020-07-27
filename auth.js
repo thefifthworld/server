@@ -125,8 +125,35 @@ const requireAdmin = async (req, res, next) => {
   }
 }
 
+/**
+ * A middleware for Express.js that checks if the logged-in user has any
+ * messages. If so, they are attached to the view options object.
+ * @param req {Object} - The Express.js request object.
+ * @param res {Object} - The Express.js response object.
+ * @param next {function} - The next function to call.
+ * @returns {Promise<void>} - A Promise that resolves when the middleware has
+ *   been executed.
+ */
+
+const checkMessages = async (req, res, next) => {
+  if (req.user) {
+    const messages = await callAPI('GET', '/members/messages', req.cookies.jwt)
+    if (messages.status === 200) {
+      const arr = []
+      const { data } = messages
+      if (data.confirmation) data.confirmation.forEach(msg => { arr.push({ cls: 'confirm', msg }) })
+      if (data.error) data.error.forEach(msg => { arr.push({ cls: 'error', msg }) })
+      if (data.warning) data.warning.forEach(msg => { arr.push({ cls: 'warning', msg }) })
+      if (data.info) data.info.forEach(msg => { arr.push({ msg }) })
+      req.viewOpts.messages = arr
+    }
+  }
+  next()
+}
+
 module.exports = {
   initializePassport,
   requireLoggedIn,
-  requireAdmin
+  requireAdmin,
+  checkMessages
 }

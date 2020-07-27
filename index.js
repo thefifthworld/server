@@ -9,7 +9,6 @@ const {
   initViewOpts,
   verifyJWT,
   renewJWT,
-  checkMessages,
   error404,
   error500
 } = require('./universal-middlewares')
@@ -32,7 +31,6 @@ initializePassport(passport)
 server.use(initViewOpts)
 server.use(verifyJWT)
 server.use(renewJWT)
-server.use(checkMessages)
 
 server.use('/', login)
 server.use('/', members)
