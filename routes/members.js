@@ -38,6 +38,7 @@ members.get('/member/:id/edit', checkMessages, async (req, res, next) => {
     const resp = await callAPI('GET', `/members/${req.params.id}`)
     if (resp && resp.status === 200) {
       req.viewOpts.profile = resp.data
+      req.viewOpts.welcome = false
       return res.render('member-form', req.viewOpts)
     }
   }
