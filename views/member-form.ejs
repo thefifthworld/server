@@ -4,6 +4,7 @@
   <body class="thefifthworld">
     <%- include('includes/header', { member }) %>
     <main>
+      <%- include('includes/messages', { messages }) %>
       <h1><%= welcome ? 'Welcome to the Fifth World!' : 'Update Your Profile' %></h1>
       <form action="/member" method="POST">
         <% if (welcome) { %>

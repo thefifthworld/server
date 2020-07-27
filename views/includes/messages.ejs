@@ -1,0 +1,11 @@
+<% if (messages && messages.length > 0) { %>
+<% messages.forEach(m => { %>
+<%
+  const classes = [ 'message' ]
+  if (m.cls) classes.push(m.cls)
+%>
+<aside class="<%= classes.join(' ') %>">
+  <%- m.msg %>
+</aside>
+<% }) %>
+<% } %>
