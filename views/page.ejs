@@ -5,16 +5,16 @@
     <%- include('includes/header', { member }) %>
     <main>
       <%- include('includes/messages', { messages }) %>
+      <% if (page.lineage && page.lineage.length > 0) { %>
       <nav class="breadcrumbs">
         <ul class="breadcrumbs">
-          <% if (page.lineage) { %>
           <% page.lineage.forEach(ancestor => { %>
           <li><a href="<%= ancestor.path %>"><%= ancestor.title %></a></li>
           <% }) %>
-          <% } %>
           <li class="current"><%= meta.title %></li>
         </ul>
       </nav>
+      <% } %>
       <h1><%= meta.title %></h1>
       <%- markup %>
     </main>
