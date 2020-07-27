@@ -1,5 +1,5 @@
-const axios = require('axios')
 const jsonwebtoken = require('jsonwebtoken')
+const callAPI = require('./api')
 const config = require('./config')
 
 /**
@@ -55,8 +55,7 @@ const renewJWT = async (req, res, next) => {
     const now = new Date().getTime()
     const minutes = (now - issued) / 60000
     if (minutes > 5) {
-      const opts = { headers: { Authorization: `Bearer ${req.cookies.jwt}` } }
-      const resp = await axios.post(`${config.api.root}/members/reauth`, null, opts)
+      const resp = await callAPI('POST', '/members/reauth', req.cookies.jwt)
       if (resp.status === 200) {
         res.cookie('jwt', resp.data, { maxAge: 900000 })
       }
