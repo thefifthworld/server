@@ -136,6 +136,7 @@ const requireAdmin = async (req, res, next) => {
  */
 
 const checkMessages = async (req, res, next) => {
+  req.viewOpts.messages = []
   if (req.user) {
     const messages = await callAPI('GET', '/members/messages', req.cookies.jwt)
     if (messages.status === 200) {
