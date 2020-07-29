@@ -16,6 +16,7 @@ const {
 const pub = require('./routes/public')
 const login = require('./routes/login')
 const members = require('./routes/members')
+const pages = require('./routes/pages')
 
 const server = express()
 server.set('view engine', 'ejs')
@@ -35,6 +36,7 @@ server.use(renewJWT)
 server.use('/', login)
 server.use('/', members)
 server.use('/', pub)
+server.use('/', pages)
 
 // Error handling
 server.use(error404)
