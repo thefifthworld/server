@@ -17,6 +17,12 @@
       <% } %>
       <h1><%= meta.title %></h1>
       <%- markup %>
+      <p class="buttons page-actions">
+        <% if (page.permissions.write) { %>
+          <a href="<%= page.path %>/edit" class="button">Edit Page</a>
+        <% } %>
+        <a href="<%= page.path %>/history" class="button secondary">View Page History</a>
+      </p>
     </main>
     <%- include('includes/footer') %>
   </body>
