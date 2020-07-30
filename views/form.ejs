@@ -32,6 +32,11 @@
           <p class="note">Should this page belong to another one? <span class="instructions">If so, provide the path to that other page here.</span></p>
         </label>
         <input id="parent" name="parent" type="text" value="<%= page && page.lineage && page.lineage.length > 0 ? page.lineage[page.lineage.length - 1].path : '' %>" />
+        <label for="body">
+          Body
+          <p class="note">You can format your page using <a href="/markdown">Markdown</a>.</p>
+        </label>
+        <textarea id="body" name="body"><%= body || '' %></textarea>
       </form>
     </main>
     <%- include('includes/footer') %>

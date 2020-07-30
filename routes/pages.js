@@ -56,13 +56,19 @@ pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
   req.viewOpts.page = false
   req.viewOpts.action = '/new'
   req.viewOpts.meta.title = 'New Page'
+  req.viewOpts.body = false
   res.render('form', req.viewOpts)
 })
 
 // GET */edit
 pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessages, async (req, res, next) => {
-  req.viewOpts.action = req.viewOpts.page.path
-  req.viewOpts.meta.title = `Editing “${req.viewOpts.page.title}”`
+  const { path, title, history } = req.viewOpts.page
+  const mostRecentChange = history && history.changes && history.changes.length > 0
+    ? history.changes[history.changes.length - 1]
+    : false
+  req.viewOpts.action = path
+  req.viewOpts.meta.title = `Editing “${title}”`
+  req.viewOpts.body = mostRecentChange && mostRecentChange.content ? mostRecentChange.content.body : false
   res.render('form', req.viewOpts)
 })
 
