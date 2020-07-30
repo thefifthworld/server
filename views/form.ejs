@@ -18,6 +18,7 @@
         </ul>
       </nav>
       <% } %>
+      <h1><%= meta.title %></h1>
       <form action="<%= action %>" method="POST" class="page">
         <label for="title">Title</label>
         <input id="title" name="title" type="text" placeholder="What do you want to write about?" value="<%= page ? page.title : '' %>" />

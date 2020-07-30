@@ -51,10 +51,18 @@ const requirePageWriteAccess = (req, res, next) => {
   }
 }
 
+// GET /new
+pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
+  req.viewOpts.page = false
+  req.viewOpts.action = '/new'
+  req.viewOpts.meta.title = 'New Page'
+  res.render('form', req.viewOpts)
+})
+
 // GET */edit
 pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessages, async (req, res, next) => {
   req.viewOpts.action = req.viewOpts.page.path
-  console.log(req.viewOpts.page)
+  req.viewOpts.meta.title = `Editing “${req.viewOpts.page.title}”`
   res.render('form', req.viewOpts)
 })
 
