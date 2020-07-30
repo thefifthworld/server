@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('includes/head', { meta }) %>
+  <body class="thefifthworld">
+    <%- include('includes/header', { member }) %>
+    <main>
+      <%- include('includes/messages', { messages }) %>
+      <% if (page) { %>
+      <nav class="breadcrumbs">
+        <ul class="breadcrumbs">
+          <% if (page.lineage && page.lineage.length > 0) { %>
+          <% page.lineage.forEach(ancestor => { %>
+          <li><a href="<%= ancestor.path %>"><%= ancestor.title %></a></li>
+          <% }) %>
+          <% } %>
+          <li><a href="<%= page.path %>"><%= page.title %></a></li>
+          <li class="current">Edit</li>
+        </ul>
+      </nav>
+      <% } %>
+      <form action="<%= action %>" method="POST" class="page">
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" placeholder="What do you want to write about?" value="<%= page ? page.title : '' %>" />
+        <label for="path">
+          Path
+          <p class="note">This sets the page&rsquo;s URL. If left blank, it will default to a &ldquo;slugified&rdquo; version of the title (e.g., &ldquo;New Page&rdquo; will become <code>/new-page</code>).</p>
+        </label>
+        <input id="path" name="path" type="text" placeholder="/example" value="<%= page ? page.path : '' %>" />
+        <label for="parent">
+          Parent
+          <p class="note">Should this page belong to another one? <span class="instructions">If so, provide the path to that other page here.</span></p>
+        </label>
+        <input id="parent" name="parent" type="text" value="<%= page && page.lineage && page.lineage.length > 0 ? page.lineage[page.lineage.length - 1].path : '' %>" />
+      </form>
+    </main>
+    <%- include('includes/footer') %>
+  </body>
+</html>
