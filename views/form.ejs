@@ -37,6 +37,19 @@
           <p class="note">You can format your page using <a href="/markdown">Markdown</a>.</p>
         </label>
         <textarea id="body" name="body"><%= body || '' %></textarea>
+        <aside class="collapsible">
+          <h3>Metadata</h3>
+          <label for="description">
+            Description
+            <p class="note">A short description added to the head of the page, used by search engines and other robots. If you don’t want to write a description, we’ll make one from the first few sentences of the page. If you’d like to write your own description, it has to remain shorter than 240 characters.</p>
+          </label>
+          <textarea name="description" id="description" data-char-count="240"><%= page && page.description ? page.description : '' %></textarea>
+          <label for="image">
+            Image
+            <p class="note">Image used by social media when you share this page.</p>
+          </label>
+          <input type="text" name="image" id="image" />
+        </aside>
       </form>
     </main>
     <%- include('includes/footer') %>
