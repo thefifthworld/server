@@ -50,6 +50,11 @@
           </label>
           <input type="text" name="image" id="image" />
         </aside>
+        <label for="msg">
+          Message
+          <p class="note">Briefly describe the change you&rsquo;ve made.</p>
+        </label>
+        <input type="text" id="msg" name="msg" />
         <p class="buttons page-actions">
           <button>Save</button>
           <% if (member && member.admin) { %><input type="button" class="secondary" name="lock" value="Lock" /><% } %>
