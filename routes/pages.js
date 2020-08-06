@@ -61,7 +61,7 @@ pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
 })
 
 // GET */edit
-pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessages, async (req, res, next) => {
+pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessages, async (req, res) => {
   const { path, title, history } = req.viewOpts.page
   const mostRecentChange = history && history.changes && history.changes.length > 0
     ? history.changes[history.changes.length - 1]
@@ -73,8 +73,18 @@ pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessa
 })
 
 // GET *
-pages.get('*', getPage, checkMessages, async (req, res, next) => {
+pages.get('*', getPage, checkMessages, async (req, res) => {
   res.render('page', req.viewOpts)
+})
+
+// POST *
+pages.post('*', requireLoggedIn, async (req, res) => {
+  try {
+    await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
+    res.redirect(302, req.originalUrl)
+  } catch (err) {
+    res.redirect(302, `${req.originalUrl}/edit`)
+  }
 })
 
 module.exports = pages
