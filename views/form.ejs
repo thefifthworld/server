@@ -19,19 +19,23 @@
       </nav>
       <% } %>
       <h1><%= meta.title %></h1>
-      <form action="<%= action %>" method="POST" class="page">
+      <form action="<%= action %>" method="POST" class="page" enctype="multipart/form-data">
         <label for="title">Title</label>
-        <input id="title" name="title" type="text" placeholder="What do you want to write about?" value="<%= page ? page.title : '' %>" />
+        <input id="title" name="title" type="text" placeholder="What do you want to write about?" value="<%= locals.page ? page.title : '' %>" />
         <label for="path">
           Path
           <p class="note">This sets the page&rsquo;s URL. If left blank, it will default to a &ldquo;slugified&rdquo; version of the title (e.g., &ldquo;New Page&rdquo; will become <code>/new-page</code>).</p>
         </label>
-        <input id="path" name="path" type="text" placeholder="/example" value="<%= page ? page.path : '' %>" />
+        <input id="path" name="path" type="text" placeholder="/example" value="<%= locals.page ? page.path : '' %>" />
         <label for="parent">
           Parent
           <p class="note">Should this page belong to another one? <span class="instructions">If so, provide the path to that other page here.</span></p>
         </label>
-        <input id="parent" name="parent" type="text" value="<%= page && page.lineage && page.lineage.length > 0 ? page.lineage[page.lineage.length - 1].path : '' %>" />
+        <input id="parent" name="parent" type="text" value="<%= locals.page && page.lineage && page.lineage.length > 0 ? page.lineage[page.lineage.length - 1].path : '' %>" />
+        <% if (locals.isUpload) { %>
+        <label for="file">File</label>
+        <input type="file" name="file" id="file" />
+        <% } %>
         <label for="body">
           Body
           <p class="note">You can format your page using <a href="/markdown">Markdown</a>.</p>
@@ -43,7 +47,7 @@
             Description
             <p class="note">A short description added to the head of the page, used by search engines and other robots. If you don’t want to write a description, we’ll make one from the first few sentences of the page. If you’d like to write your own description, it has to remain shorter than 240 characters.</p>
           </label>
-          <textarea name="description" id="description" data-char-count="240"><%= page && page.description ? page.description : '' %></textarea>
+          <textarea name="description" id="description" data-char-count="240"><%= locals.page && page.description ? page.description : '' %></textarea>
           <label for="image">
             Image
             <p class="note">Image used by social media when you share this page.</p>
@@ -56,10 +60,10 @@
         </label>
         <input type="text" id="msg" name="msg" />
         <p class="buttons page-actions">
-          <button>Save</button>
-          <% if (locals.member && member.admin) { %><input type="button" class="secondary" name="lock" value="Lock" /><% } %>
-          <% if (locals.member && member.admin) { %><input type="button" class="secondary" name="hide" value="Hide" /><% } %>
-          <a href="<%= page.path %>" class="button secondary">Cancel</a>
+          <button><%= locals.page ? 'Save' : locals.isUpload ? 'Upload' : 'Create' %></button>
+          <% if (locals.page && locals.member && member.admin) { %><input type="button" class="secondary" name="lock" value="Lock" /><% } %>
+          <% if (locals.page && locals.member && member.admin) { %><input type="button" class="secondary" name="hide" value="Hide" /><% } %>
+          <a href="<%= locals.page ? page.path : '/dashboard' %>" class="button secondary">Cancel</a>
         </p>
       </form>
     </main>

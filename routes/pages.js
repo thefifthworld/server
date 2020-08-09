@@ -61,7 +61,8 @@ pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
 // GET /upload
 pages.get('/upload', requireLoggedIn, checkMessages, async (req, res, next) => {
   req.viewOpts.action = '/new'
-  req.viewOpts.meta.title = 'New File'
+  req.viewOpts.meta.title = 'Upload a File'
+  req.viewOpts.isUpload = true
   res.render('form', req.viewOpts)
 })
 
