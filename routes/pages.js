@@ -57,6 +57,17 @@ pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
   req.viewOpts.action = '/new'
   req.viewOpts.meta.title = 'New Page'
   req.viewOpts.body = false
+  req.viewOpts.upload = false
+  res.render('form', req.viewOpts)
+})
+
+// GET /upload
+pages.get('/upload', requireLoggedIn, checkMessages, async (req, res, next) => {
+  req.viewOpts.page = false
+  req.viewOpts.action = '/new'
+  req.viewOpts.meta.title = 'New File'
+  req.viewOpts.body = false
+  req.viewOpts.upload = true
   res.render('form', req.viewOpts)
 })
 
