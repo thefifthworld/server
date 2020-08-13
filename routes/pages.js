@@ -111,7 +111,7 @@ pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
 pages.post('/new', requireLoggedIn, useMulter, convertMulter, async (req, res, next) => {
   try {
     const page = await callAPI('POST', `/pages`, req.cookies.jwt, req.body)
-    res.redirect(302, page.path)
+    res.redirect(302, page.data.path)
   } catch (err) {
     console.error(err)
     res.redirect(302, '/new')
