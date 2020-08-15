@@ -12,7 +12,8 @@ const config = require('./config')
  */
 
 const callAPI = async (method, endpoint, jwt, data) => {
-  const opts = jwt ? { headers: { Authorization: `Bearer ${jwt}` } } : {}
+  const opts = { maxContentLength: 'Infinity', maxBodyLength: 'Infinity' }
+  if (jwt) opts.headers = { Authorization: `Bearer ${jwt}` }
   const url = `${config.api.root}${endpoint}`
 
   let res

@@ -1,7 +1,56 @@
 const express = require('express')
-const pages = express.Router()
+const multer = require('multer')
 const callAPI = require('../api')
 const { checkMessages, requireLoggedIn } = require('../auth')
+
+const pages = express.Router()
+const upload = multer()
+
+/**
+ * Convert a single file from Multer to the format accepted by our API.
+ * @param src {Object} - The file object provided by Multer.
+ * @returns {{data: *, size: *, name: *, mimetype: *, encoding: *}} - An object
+ *   ready for our API.
+ */
+
+const convertMulterFile = src => {
+  return {
+    name: src.originalname,
+    data: src.buffer,
+    size: src.size,
+    encoding: src.encoding,
+    mimetype: src.mimetype
+  }
+}
+
+/**
+ * Express.js Middleware that converts `file` and `thumbnail` files from Multer
+ * to the format required by our API.
+ * @param req {Object} - The Express.js request object.
+ * @param res {Object} - The Express.js response object.
+ * @param next {function} - The next function to be called.
+ */
+
+const convertMulter = (req, res, next) => {
+  const { files } = req
+  if (files) {
+    const file = files.file && files.file.length > 0 ? files.file[0] : false
+    const thumbnail = files.thumbnail && files.thumbnail.length > 0 ? files.thumbnail[0] : false
+    if (file || thumbnail) {
+      req.body.files = {}
+      if (file) req.body.files.file = convertMulterFile(file)
+      if (thumbnail) req.body.files.thumbnail = convertMulterFile(thumbnail)
+    }
+  }
+  next()
+}
+
+/**
+ * Middleware to pass to pages that might upload a file and potentially
+ * a thumbnail.
+ */
+
+const useMulter = upload.fields([ { name: 'file', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 } ])
 
 /**
  * Express.js middleware that loads a requested page.
@@ -53,10 +102,27 @@ const requirePageWriteAccess = (req, res, next) => {
 
 // GET /new
 pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
-  req.viewOpts.page = false
   req.viewOpts.action = '/new'
   req.viewOpts.meta.title = 'New Page'
-  req.viewOpts.body = false
+  res.render('form', req.viewOpts)
+})
+
+// POST /new
+pages.post('/new', requireLoggedIn, useMulter, convertMulter, async (req, res, next) => {
+  try {
+    const page = await callAPI('POST', `/pages`, req.cookies.jwt, req.body)
+    res.redirect(302, page.data.path)
+  } catch (err) {
+    console.error(err)
+    res.redirect(302, '/new')
+  }
+})
+
+// GET /upload
+pages.get('/upload', requireLoggedIn, checkMessages, async (req, res, next) => {
+  req.viewOpts.action = '/new'
+  req.viewOpts.meta.title = 'Upload a File'
+  req.viewOpts.isUpload = true
   res.render('form', req.viewOpts)
 })
 
@@ -78,7 +144,7 @@ pages.get('*', getPage, checkMessages, async (req, res) => {
 })
 
 // POST *
-pages.post('*', requireLoggedIn, async (req, res) => {
+pages.post('*', requireLoggedIn, useMulter, convertMulter, async (req, res) => {
   try {
     await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
     res.redirect(302, req.originalUrl)
