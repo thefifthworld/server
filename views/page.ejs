@@ -15,6 +15,15 @@
         </ul>
       </nav>
       <% } %>
+      <% if (page.type === 'Art' && page.files) { %>
+      <%
+        const images = page.files.filter(file => file.mime.startsWith('image/'))
+        const image = images && Array.isArray(images) && images.length > 0 ? images[0] : null
+      %>
+      <% if (image) { %>
+        <img src="<%= image.urls.full %>" alt="<%= meta.title %>" style="display:block;margin:1em auto;" />
+      <% } %>
+      <% } %>
       <h1><%= meta.title %></h1>
       <%- markup %>
       <p class="buttons page-actions">
