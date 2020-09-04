@@ -25,6 +25,18 @@
       <% } %>
       <% } %>
       <h1><%= meta.title %></h1>
+      <% if (page.type === 'File' && page.files) { %>
+      <%
+        const files = page.files.filter(file => !file.mime.startsWith('image/'))
+        const file = files && Array.isArray(files) && files.length > 0 ? files[0] : null
+      %>
+      <% if (file) { %>
+      <a href="<%= file.urls.full %>" class="download" download>
+        <span class="label"><%= file.name.replace(/^uploads\/(.*?)\.\d\d\d\d\d\d\d\d\.\d\d\d\d\d\d\.(.*?)$/i, '$1.$2') %></span>
+        <span class="details"><%= file.mime %>; <%= file.readableSize %></span>
+      </a>
+      <% } %>
+      <% } %>
       <%- markup %>
       <p class="buttons page-actions">
         <% if (page.permissions.write) { %>
