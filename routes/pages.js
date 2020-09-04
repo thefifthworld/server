@@ -126,6 +126,11 @@ pages.get('/upload', requireLoggedIn, checkMessages, async (req, res, next) => {
   res.render('form', req.viewOpts)
 })
 
+// GET */history
+pages.get('*/history', getPage, checkMessages, async (req, res) => {
+  res.render('page-history', req.viewOpts)
+})
+
 // GET */edit
 pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessages, async (req, res) => {
   const { path, title, history } = req.viewOpts.page
