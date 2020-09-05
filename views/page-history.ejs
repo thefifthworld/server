@@ -29,20 +29,6 @@
       </thead>
       <tbody>
       <% page.history.changes.forEach(change => { %>
-        <%
-          const months = [ 'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December' ]
-          const t = new Date(change.timestamp)
-          const h = t.getHours()
-          const hrs = h === 0 ? 12 : h > 12 ? h - 12 : h
-          const min = `${t.getMinutes()}`.padStart(2, '0')
-          const elems = []
-          elems.push(t.getDate())
-          elems.push(months[t.getMonth()])
-          elems.push(t.getFullYear())
-          elems.push(`${hrs}:${min}`)
-          elems.push(h > 11 ? 'AM' : 'PM')
-        %>
         <tr>
           <td><input type="radio" name="a" value="<%= change.id %>" /></td>
           <td><input type="radio" name="b" value="<%= change.id %>" /></td>
@@ -50,7 +36,7 @@
             <%= change.msg %>
             <p class="details">
               Change made by <a href="/member/<%= change.editor.id %>"><%= change.editor.name %></a>,
-              <a href="<%= page.path %>/<%= change.id %>"><%- elems.join('&nbsp;') %></a>
+              <a href="<%= page.path %>/<%= change.id %>"><%- helpers.formatTimestamp(change.timestamp) %></a>
             </p>
           </td>
         </tr>
