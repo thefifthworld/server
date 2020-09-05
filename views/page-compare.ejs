@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('includes/head', { meta }) %>
+<body class="thefifthworld">
+<%- include('includes/header', { member }) %>
+<main>
+  <%- include('includes/messages', { messages }) %>
+  <% if (page.lineage && page.lineage.length > 0) { %>
+    <nav class="breadcrumbs">
+      <ul class="breadcrumbs">
+        <% page.lineage.forEach(ancestor => { %>
+          <li><a href="<%= ancestor.path %>"><%= ancestor.title %></a></li>
+        <% }) %>
+        <li><a href="<%= page.path %>"><%= page.title %></a></li>
+        <li class="current"><a href="<%= page.path %>/history">History</a></li>
+      </ul>
+    </nav>
+  <% } %>
+  <h1><%= meta.title %></h1>
+  <p class="buttons page-actions">
+    <% if (page.permissions.write) { %>
+      <a href="<%= page.path %>/edit" class="button">Edit Page</a>
+    <% } %>
+    <a href="<%= page.path %>/history" class="button secondary">View Page History</a>
+  </p>
+</main>
+<%- include('includes/footer') %>
+</body>
+</html>
