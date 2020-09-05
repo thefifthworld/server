@@ -50,7 +50,7 @@
             <%= change.msg %>
             <p class="details">
               Change made by <a href="/member/<%= change.editor.id %>"><%= change.editor.name %></a>,
-              <a href="<%= page.path %>"><%- elems.join('&nbsp;') %></a>
+              <a href="<%= page.path %>/<%= change.id %>"><%- elems.join('&nbsp;') %></a>
             </p>
           </td>
         </tr>
