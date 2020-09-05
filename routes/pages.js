@@ -67,7 +67,9 @@ const getPage = async (req, res, next) => {
     const commands = ['/edit', '/history', '/compare', '/like', '/unlike']
     const path = req.originalUrl.indexOf('?') > -1
       ? req.originalUrl.substr(0, req.originalUrl.indexOf('?'))
-      : req.originalUrl
+      : req.originalUrl.match(/(.*?)\/rollback\/(\d*)/i)
+        ? req.originalUrl.match(/(.*?)\/rollback\/(\d*)/i)[1]
+        :req.originalUrl
     const lastElement = path.substr(path.lastIndexOf('/'))
     const isCommand = commands.includes(lastElement)
     const version = parseInt(lastElement.substr(1))
@@ -215,13 +217,30 @@ pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessa
   res.render('form', req.viewOpts)
 })
 
+// GET */rollback/:id
+pages.get('*/rollback/:id', requireLoggedIn, getPage, requirePageWriteAccess, async (req, res) => {
+  try {
+    const match = req.originalUrl.match(/(.*?)\/rollback\/(\d*)/i)
+    const path = match && Array.isArray(match) && match.length > 1 ? match[1] : null
+    console.log({ match, path })
+    if (path) {
+      await callAPI('POST', `/pages${path}/rollback/${req.params.id}`, req.cookies.jwt, req.body)
+      res.redirect(302, path)
+    } else {
+      res.redirect(302, req.originalUrl)
+    }
+  } catch (err) {
+    res.redirect(302, '/dashboard')
+  }
+})
+
 // GET *
 pages.get('*', getPage, checkMessages, async (req, res) => {
   res.render('page', req.viewOpts)
 })
 
 // POST *
-pages.post('*', requireLoggedIn, useMulter, convertMulter, async (req, res) => {
+pages.post('*', requireLoggedIn, requirePageWriteAccess, useMulter, convertMulter, async (req, res) => {
   try {
     await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
     res.redirect(302, req.originalUrl)
