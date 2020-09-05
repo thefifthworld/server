@@ -228,6 +228,17 @@ pages.get('*/lock', requireLoggedIn, getPage, checkMessages, async (req, res) =>
   }
 })
 
+// GET */unlock
+pages.get('*/unlock', requireLoggedIn, getPage, checkMessages, async (req, res) => {
+  try {
+    await callAPI('PATCH', `/pages${req.viewOpts.page.path}/unlock`, req.cookies.jwt, req.body)
+    res.redirect(302, req.viewOpts.page.path)
+  } catch (err) {
+    console.error(err)
+    res.redirect(302, '/dashboard')
+  }
+})
+
 // GET */rollback/:id
 pages.get('*/rollback/:id', requireLoggedIn, getPage, requirePageWriteAccess, async (req, res) => {
   try {
