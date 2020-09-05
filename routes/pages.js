@@ -64,12 +64,18 @@ const useMulter = upload.fields([ { name: 'file', maxCount: 1 }, { name: 'thumbn
 const getPage = async (req, res, next) => {
   try {
     const commands = [ '/edit', '/history', '/compare', '/like', '/unlike' ]
-    const url = commands.includes(req.originalUrl.substr(req.originalUrl.lastIndexOf('/')))
+    const lastElement = req.originalUrl.substr(req.originalUrl.lastIndexOf('/'))
+    const isCommand = commands.includes(lastElement)
+    const version = parseInt(lastElement.substr(1))
+    const isVersion = !isNaN(version)
+    const url = isCommand || isVersion
       ? req.originalUrl.substr(0, req.originalUrl.lastIndexOf('/'))
       : req.originalUrl
-    const resp = await callAPI('GET', `/pages${url}`, req.cookies.jwt)
+    const endpoint = isVersion ? `/pages${url}?version=${version}` : `/pages${url}`
+    const resp = await callAPI('GET', endpoint, req.cookies.jwt)
     req.viewOpts.meta.title = resp.data.page.title
     req.viewOpts.page = resp.data.page
+    if (isVersion) req.viewOpts.page.version = version
     req.viewOpts.markup = resp.data.markup
     next()
   } catch (err) {
