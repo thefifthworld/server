@@ -112,7 +112,7 @@ const getPageVersion = (changes, vstr) => {
   if (!isNaN(vint)) {
     const matching = changes.filter(change => change.id === vint)
     if (matching && Array.isArray(matching) && matching.length > 0) {
-      return JSON.parse(JSON.stringify(matching[0]))
+      return matching[0]
     }
   }
   return null
@@ -176,15 +176,23 @@ pages.get('*/history', getPage, checkMessages, async (req, res) => {
 pages.get('*/compare', getPage, checkMessages, async (req, res) => {
   const a = getPageVersion(req.viewOpts.page.history.changes, req.query.a)
   const b = getPageVersion(req.viewOpts.page.history.changes, req.query.b)
+  const fields = {
+    title: 'Title',
+    path: 'Path',
+    parent: 'Parent',
+    body: 'Body',
+    description: 'Description'
+  }
+
   if (a && b) {
     const differ = new Diff()
-    const fields = Object.keys(a.content)
-    fields.forEach(field => {
-      const diffs = differ.main(a.content[field], b.content[field])
+    const keys = Object.keys(a.content)
+    keys.forEach(key => {
+      const diffs = differ.main(a.content[key], b.content[key])
       differ.cleanupSemantic(diffs)
-      b.content[field] = differ.prettyHtml(diffs)
+      b.content[key] = differ.prettyHtml(diffs)
     })
-    req.viewOpts.compare = { a, b }
+    req.viewOpts.compare = { a, b, fields }
     res.render('page-compare', req.viewOpts)
   } else {
     res.redirect(req.page.path)
