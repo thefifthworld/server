@@ -174,8 +174,10 @@ pages.get('*/history', getPage, checkMessages, async (req, res) => {
 
 // GET */compare
 pages.get('*/compare', getPage, checkMessages, async (req, res) => {
-  const a = getPageVersion(req.viewOpts.page.history.changes, req.query.a)
-  const b = getPageVersion(req.viewOpts.page.history.changes, req.query.b)
+  const aid = Math.min(parseInt(req.query.a), parseInt(req.query.b))
+  const bid = Math.max(parseInt(req.query.a), parseInt(req.query.b))
+  const a = getPageVersion(req.viewOpts.page.history.changes, `${aid}`)
+  const b = getPageVersion(req.viewOpts.page.history.changes, `${bid}`)
   const fields = {
     title: 'Title',
     path: 'Path',
@@ -188,14 +190,16 @@ pages.get('*/compare', getPage, checkMessages, async (req, res) => {
     const differ = new Diff()
     const keys = Object.keys(a.content)
     keys.forEach(key => {
-      const diffs = differ.main(a.content[key], b.content[key])
+      const fa = a.content[key] || ''
+      const fb = b.content[key] || ''
+      const diffs = differ.main(fa, fb)
       differ.cleanupSemantic(diffs)
       b.content[key] = differ.prettyHtml(diffs)
     })
     req.viewOpts.compare = { a, b, fields }
     res.render('page-compare', req.viewOpts)
   } else {
-    res.redirect(req.page.path)
+    res.redirect(req.viewOpts.page.path)
   }
 })
 
