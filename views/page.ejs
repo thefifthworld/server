@@ -55,6 +55,13 @@
         <a href="<%= page.path %>/lock" class="button secondary">Lock Page</a>
         <% } %>
         <% } %>
+        <% if (locals.member && (member.admin || member.id === page.owner.id)) { %>
+        <% if (page.permissions.code === 700) { %>
+          <a href="<%= page.path %>/unhide" class="button secondary">Unhide Page</a>
+        <% } else { %>
+          <a href="<%= page.path %>/hide" class="button secondary">Hide Page</a>
+        <% } %>
+        <% } %>
       </p>
     </main>
     <%- include('includes/footer') %>
