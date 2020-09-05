@@ -64,7 +64,7 @@ const useMulter = upload.fields([ { name: 'file', maxCount: 1 }, { name: 'thumbn
 
 const getPage = async (req, res, next) => {
   try {
-    const commands = ['/edit', '/history', '/compare', '/like', '/unlike']
+    const commands = ['/edit', '/history', '/compare', '/like', '/unlike', '/lock', '/unlock', '/hide', '/unhide']
     const path = req.originalUrl.indexOf('?') > -1
       ? req.originalUrl.substr(0, req.originalUrl.indexOf('?'))
       : req.originalUrl.match(/(.*?)\/rollback\/(\d*)/i)
@@ -217,12 +217,33 @@ pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessa
   res.render('form', req.viewOpts)
 })
 
+// GET */lock
+pages.get('*/lock', requireLoggedIn, getPage, checkMessages, async (req, res) => {
+  try {
+    await callAPI('PATCH', `/pages${req.viewOpts.page.path}/lock`, req.cookies.jwt, req.body)
+    res.redirect(302, req.viewOpts.page.path)
+  } catch (err) {
+    console.error(err)
+    res.redirect(302, '/dashboard')
+  }
+})
+
+// GET */unlock
+pages.get('*/unlock', requireLoggedIn, getPage, checkMessages, async (req, res) => {
+  try {
+    await callAPI('PATCH', `/pages${req.viewOpts.page.path}/unlock`, req.cookies.jwt, req.body)
+    res.redirect(302, req.viewOpts.page.path)
+  } catch (err) {
+    console.error(err)
+    res.redirect(302, '/dashboard')
+  }
+})
+
 // GET */rollback/:id
 pages.get('*/rollback/:id', requireLoggedIn, getPage, requirePageWriteAccess, async (req, res) => {
   try {
     const match = req.originalUrl.match(/(.*?)\/rollback\/(\d*)/i)
     const path = match && Array.isArray(match) && match.length > 1 ? match[1] : null
-    console.log({ match, path })
     if (path) {
       await callAPI('POST', `/pages${path}/rollback/${req.params.id}`, req.cookies.jwt, req.body)
       res.redirect(302, path)
