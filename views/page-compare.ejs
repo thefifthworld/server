@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('includes/head', { meta }) %>
+<body class="thefifthworld">
+<%- include('includes/header', { member }) %>
+<main>
+  <%- include('includes/messages', { messages }) %>
+  <% if (page.lineage && page.lineage.length > 0) { %>
+    <nav class="breadcrumbs">
+      <ul class="breadcrumbs">
+        <% page.lineage.forEach(ancestor => { %>
+          <li><a href="<%= ancestor.path %>"><%= ancestor.title %></a></li>
+        <% }) %>
+        <li><a href="<%= page.path %>"><%= page.title %></a></li>
+        <li class="current"><a href="<%= page.path %>/history">History</a></li>
+      </ul>
+    </nav>
+  <% } %>
+  <h1><%= meta.title %></h1>
+  <% if (locals.compare && locals.page) { %>
+  <table class="diff">
+    <thead>
+      <tr class="version">
+        <th>Version created by <a href="/member/<%= compare.a.editor.id %>"><%= compare.a.editor.name %></a> on <a href="<%= page.path %>/<%= compare.a.id %>"><%- helpers.formatTimestamp(compare.a.timestamp) %></a></th>
+        <th>Version created by <a href="/member/<%= compare.b.editor.id %>"><%= compare.b.editor.name %></a> on <a href="<%= page.path %>/<%= compare.b.id %>"><%- helpers.formatTimestamp(compare.b.timestamp) %></a></th>
+      </tr>
+      <tr class="msg">
+        <th><%= compare.a.msg %></th>
+        <th><%= compare.b.msg %></th>
+      </tr>
+      <tr class="rollback">
+        <% if (helpers.isCurrentVersion(compare.a.id, page)) { %>
+        <th class="current">Current version</th>
+        <% } else { %>
+        <th><a href="<%= page.path %>/rollback/<%= compare.a.id %>">Roll back to this version</a></th>
+        <% } %>
+        <% if (helpers.isCurrentVersion(compare.b.id, page)) { %>
+          <th class="current">Current version</th>
+        <% } else { %>
+          <th><a href="<%= page.path %>/rollback/<%= compare.b.id %>">Roll back to this version</a></th>
+        <% } %>
+      </tr>
+    </thead>
+    <tbody>
+    <% Object.keys(compare.fields).forEach(field => { %>
+      <tr>
+        <th colspan="2"><%= compare.fields[field] %></th>
+      </tr>
+      <tr>
+        <td colspan="2"><%- compare.b.content[field] %></td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table>
+  <% } %>
+  <p class="buttons page-actions">
+    <% if (page.permissions.write) { %>
+      <a href="<%= page.path %>/edit" class="button">Edit Page</a>
+    <% } %>
+    <a href="<%= page.path %>/history" class="button secondary">View Page History</a>
+  </p>
+</main>
+<%- include('includes/footer') %>
+</body>
+</html>

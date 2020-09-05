@@ -15,6 +15,11 @@
         </ul>
       </nav>
       <% } %>
+      <% if (page.version) { %>
+      <aside class="message warning">
+        <p>You&rsquo;ve brought up an out-of-date version of this page. You might want to see <a href="<%= page.path %>">the current version of this page</a> instead. <a href="/member/<%= page.version.editor.id %>"><%= page.version.editor.name %></a> made this version on <%- helpers.formatTimestamp(page.version.timestamp) %><% if (page.version.msg) { %>, with this message: <em>&ldquo;<%= page.version.msg %>&rdquo;</em><% } else { %>.<% } %></p>
+      </aside>
+      <% } %>
       <% if (page.type === 'Art' && page.files) { %>
       <%
         const images = page.files.filter(file => file.mime.startsWith('image/'))
