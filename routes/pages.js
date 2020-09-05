@@ -1,5 +1,6 @@
 const express = require('express')
 const multer = require('multer')
+const Diff = require('text-diff')
 const callAPI = require('../api')
 const { checkMessages, requireLoggedIn } = require('../auth')
 
@@ -98,6 +99,26 @@ const getPage = async (req, res, next) => {
 }
 
 /**
+ * Returns the version from a page with a given ID.
+ * @param changes {Object[]} - The array of the changes made to the page.
+ * @param vstr {string} - The string representing the ID of the change you want
+ *   to retrieve.
+ * @returns {Object|null} - Either the change object with the matching ID, or
+ *   `null` if no change could be found with that ID.
+ */
+
+const getPageVersion = (changes, vstr) => {
+  const vint = parseInt(vstr)
+  if (!isNaN(vint)) {
+    const matching = changes.filter(change => change.id === vint)
+    if (matching && Array.isArray(matching) && matching.length > 0) {
+      return JSON.parse(JSON.stringify(matching[0]))
+    }
+  }
+  return null
+}
+
+/**
  * Express.js middleware that checks if the user has write permissions for the
  * loaded page.
  * @param req {Object} - The Express.js request object.
@@ -153,8 +174,21 @@ pages.get('*/history', getPage, checkMessages, async (req, res) => {
 
 // GET */compare
 pages.get('*/compare', getPage, checkMessages, async (req, res) => {
-  console.log(req.query)
-  res.render('page-compare', req.viewOpts)
+  const a = getPageVersion(req.viewOpts.page.history.changes, req.query.a)
+  const b = getPageVersion(req.viewOpts.page.history.changes, req.query.b)
+  if (a && b) {
+    const differ = new Diff()
+    const fields = Object.keys(a.content)
+    fields.forEach(field => {
+      const diffs = differ.main(a.content[field], b.content[field])
+      differ.cleanupSemantic(diffs)
+      b.content[field] = differ.prettyHtml(diffs)
+    })
+    req.viewOpts.compare = { a, b }
+    res.render('page-compare', req.viewOpts)
+  } else {
+    res.redirect(req.page.path)
+  }
 })
 
 // GET */edit
