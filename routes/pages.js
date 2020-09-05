@@ -75,8 +75,19 @@ const getPage = async (req, res, next) => {
     const resp = await callAPI('GET', endpoint, req.cookies.jwt)
     req.viewOpts.meta.title = resp.data.page.title
     req.viewOpts.page = resp.data.page
-    if (isVersion) req.viewOpts.page.version = version
     req.viewOpts.markup = resp.data.markup
+
+    if (isVersion) {
+      const vids = resp.data.page.history.changes.map(change => change.id)
+      const latest = vids[vids.length - 1]
+      if (version !== latest) {
+        const matching = resp.data.page.history.changes.filter(change => change.id === version)
+        if (matching && Array.isArray(matching) && matching.length > 0) {
+          req.viewOpts.page.version = matching[0]
+        }
+      }
+    }
+
     next()
   } catch (err) {
     return res.status(404).render('errors/e404', req.viewOpts)
