@@ -257,6 +257,22 @@ pages.get('*/unhide', requireLoggedIn, getPage, checkMessages, async (req, res) 
   }
 })
 
+// GET */like
+pages.get('*/like', requireLoggedIn, getPage, checkMessages, async (req, res) => {
+  try {
+    await callAPI('GET', `/pages${req.viewOpts.page.path}/like`, req.cookies.jwt)
+  } catch (err) {}
+  res.redirect(302, req.viewOpts.page.path)
+})
+
+// GET */unlike
+pages.get('*/unlike', requireLoggedIn, getPage, checkMessages, async (req, res) => {
+  try {
+    await callAPI('GET', `/pages${req.viewOpts.page.path}/unlike`, req.cookies.jwt)
+  } catch (err) {}
+  res.redirect(302, req.viewOpts.page.path)
+})
+
 // GET */rollback/:id
 pages.get('*/rollback/:id', requireLoggedIn, getPage, requirePageWriteAccess, async (req, res) => {
   try {
