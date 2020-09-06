@@ -43,6 +43,19 @@
       <% } %>
       <% } %>
       <%- markup %>
+      <% if (locals.member) { %>
+      <% if (page.likes.ids.includes(member.id)) { %>
+      <p class="likes">
+        <a href="<%= page.path %>/unlike" class="unlike" data-like="<%= page.path %>/like">Unlike</a>
+        <span class="count"><%= page.likes.ids.length %></span> <%= page.likes.ids.length === 1 ? 'like' : 'likes' %>
+      </p>
+      <% } else { %>
+      <p class="likes">
+        <a href="<%= page.path %>/like" class="like" data-unlike="<%= page.path %>/unlike">Like</a>
+        <span class="count"><%= page.likes.ids.length %></span> <%= page.likes.ids.length === 1 ? 'like' : 'likes' %>
+      </p>
+      <% } %>
+      <% } %>
       <p class="buttons page-actions">
         <% if (page.permissions.write) { %>
           <a href="<%= page.path %>/edit" class="button">Edit Page</a>
