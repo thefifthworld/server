@@ -44,16 +44,16 @@
       <% } %>
       <%- markup %>
       <% if (locals.member) { %>
-      <% const tense = page.likes.ids.length === 1 ? 'like' : 'likes' %>
-      <% if (page.likes.ids.includes(member.id)) { %>
+      <% const tense = page.likes.length === 1 ? 'like' : 'likes' %>
+      <% if (page.likes.includes(member.id)) { %>
       <p class="likes">
         <a href="<%= page.path %>/unlike" class="unlike" data-like="<%= page.path %>/like">Unlike</a>
-        <span class="count"><%= page.likes.ids.length %> <%= tense %></span>
+        <span class="count"><%= page.likes.length %> <%= tense %></span>
       </p>
       <% } else { %>
       <p class="likes">
         <a href="<%= page.path %>/like" class="like" data-unlike="<%= page.path %>/unlike">Like</a>
-        <span class="count"><%= page.likes.ids.length %> <%= tense %></span>
+        <span class="count"><%= page.likes.length %> <%= tense %></span>
       </p>
       <% } %>
       <% } %>
