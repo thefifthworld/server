@@ -260,7 +260,7 @@ pages.get('*/unhide', requireLoggedIn, getPage, checkMessages, async (req, res) 
 // GET */like
 pages.get('*/like', requireLoggedIn, getPage, checkMessages, async (req, res) => {
   try {
-    await callAPI('GET', `/pages${req.viewOpts.page.path}/like`, req.cookies.jwt)
+    await callAPI('POST', `/pages${req.viewOpts.page.path}/like`, req.cookies.jwt)
   } catch (err) {}
   res.redirect(302, req.viewOpts.page.path)
 })
@@ -268,7 +268,7 @@ pages.get('*/like', requireLoggedIn, getPage, checkMessages, async (req, res) =>
 // GET */unlike
 pages.get('*/unlike', requireLoggedIn, getPage, checkMessages, async (req, res) => {
   try {
-    await callAPI('GET', `/pages${req.viewOpts.page.path}/unlike`, req.cookies.jwt)
+    await callAPI('DELETE', `/pages${req.viewOpts.page.path}/like`, req.cookies.jwt)
   } catch (err) {}
   res.redirect(302, req.viewOpts.page.path)
 })
