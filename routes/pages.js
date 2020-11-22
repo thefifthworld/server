@@ -297,7 +297,7 @@ pages.get('*', getPage, checkMessages, async (req, res) => {
 })
 
 // POST *
-pages.post('*', requireLoggedIn, requirePageWriteAccess, useMulter, convertMulter, async (req, res) => {
+pages.post('*', requireLoggedIn, getPage, requirePageWriteAccess, useMulter, convertMulter, async (req, res) => {
   try {
     await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
     res.redirect(302, req.originalUrl)
