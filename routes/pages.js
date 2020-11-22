@@ -147,6 +147,10 @@ const requirePageWriteAccess = (req, res, next) => {
 pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
   req.viewOpts.action = '/new'
   req.viewOpts.meta.title = 'New Page'
+  if (req.cookies.failedAttempt) {
+    req.viewOpts.failedAttempt = JSON.parse(req.cookies.failedAttempt)
+    res.clearCookie('failedAttempt', { httpOnly: true })
+  }
   res.render('form', req.viewOpts)
 })
 
@@ -156,8 +160,8 @@ pages.post('/new', requireLoggedIn, useMulter, convertMulter, async (req, res, n
     const page = await callAPI('POST', `/pages`, req.cookies.jwt, req.body)
     res.redirect(302, page.data.path)
   } catch (err) {
-    console.error(err)
-    res.redirect(302, '/new')
+    res.cookie('failedAttempt', err.config.data, { httpOnly: true })
+    res.redirect('/new')
   }
 })
 
@@ -208,12 +212,14 @@ pages.get('*/compare', getPage, checkMessages, async (req, res) => {
 // GET */edit
 pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessages, async (req, res) => {
   const { path, title, history } = req.viewOpts.page
-  const mostRecentChange = history && history.changes && history.changes.length > 0
-    ? history.changes[history.changes.length - 1]
-    : false
+  const mostRecentChange = history && history.length > 0 ? history[history.length - 1] : false
   req.viewOpts.action = path
   req.viewOpts.meta.title = `Editing “${title}”`
   req.viewOpts.body = mostRecentChange && mostRecentChange.content ? mostRecentChange.content.body : false
+  if (req.cookies.failedAttempt) {
+    req.viewOpts.failedAttempt = JSON.parse(req.cookies.failedAttempt)
+    res.clearCookie('failedAttempt', { httpOnly: true })
+  }
   res.render('form', req.viewOpts)
 })
 
@@ -295,11 +301,12 @@ pages.get('*', getPage, checkMessages, async (req, res) => {
 })
 
 // POST *
-pages.post('*', requireLoggedIn, requirePageWriteAccess, useMulter, convertMulter, async (req, res) => {
+pages.post('*', requireLoggedIn, getPage, requirePageWriteAccess, useMulter, convertMulter, async (req, res) => {
   try {
     await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
     res.redirect(302, req.originalUrl)
   } catch (err) {
+    res.cookie('failedAttempt', err.config.data, { httpOnly: true })
     res.redirect(302, `${req.originalUrl}/edit`)
   }
 })
