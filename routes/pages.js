@@ -216,6 +216,10 @@ pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessa
   req.viewOpts.action = path
   req.viewOpts.meta.title = `Editing “${title}”`
   req.viewOpts.body = mostRecentChange && mostRecentChange.content ? mostRecentChange.content.body : false
+  if (req.cookies.failedAttempt) {
+    req.viewOpts.failedAttempt = JSON.parse(req.cookies.failedAttempt)
+    res.clearCookie('failedAttempt', { httpOnly: true })
+  }
   res.render('form', req.viewOpts)
 })
 
@@ -302,6 +306,7 @@ pages.post('*', requireLoggedIn, getPage, requirePageWriteAccess, useMulter, con
     await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
     res.redirect(302, req.originalUrl)
   } catch (err) {
+    res.cookie('failedAttempt', err.config.data, { httpOnly: true })
     res.redirect(302, `${req.originalUrl}/edit`)
   }
 })
