@@ -212,9 +212,7 @@ pages.get('*/compare', getPage, checkMessages, async (req, res) => {
 // GET */edit
 pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessages, async (req, res) => {
   const { path, title, history } = req.viewOpts.page
-  const mostRecentChange = history && history.changes && history.changes.length > 0
-    ? history.changes[history.changes.length - 1]
-    : false
+  const mostRecentChange = history && history.length > 0 ? history[history.length - 1] : false
   req.viewOpts.action = path
   req.viewOpts.meta.title = `Editing “${title}”`
   req.viewOpts.body = mostRecentChange && mostRecentChange.content ? mostRecentChange.content.body : false
