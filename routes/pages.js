@@ -147,6 +147,10 @@ const requirePageWriteAccess = (req, res, next) => {
 pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
   req.viewOpts.action = '/new'
   req.viewOpts.meta.title = 'New Page'
+  if (req.cookies.failedAttempt) {
+    req.viewOpts.failedAttempt = JSON.parse(req.cookies.failedAttempt)
+    res.clearCookie('failedAttempt', { httpOnly: true })
+  }
   res.render('form', req.viewOpts)
 })
 
@@ -156,8 +160,8 @@ pages.post('/new', requireLoggedIn, useMulter, convertMulter, async (req, res, n
     const page = await callAPI('POST', `/pages`, req.cookies.jwt, req.body)
     res.redirect(302, page.data.path)
   } catch (err) {
-    console.error(err)
-    res.redirect(302, '/new')
+    res.cookie('failedAttempt', err.config.data, { httpOnly: true })
+    res.redirect('/new')
   }
 })
 
