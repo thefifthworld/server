@@ -84,10 +84,10 @@ const getPage = async (req, res, next) => {
     req.viewOpts.markup = resp.data.markup
 
     if (isVersion) {
-      const vids = resp.data.page.history.changes.map(change => change.id)
+      const vids = resp.data.page.history.map(change => change.id)
       const latest = vids[vids.length - 1]
       if (version !== latest) {
-        const matching = resp.data.page.history.changes.filter(change => change.id === version)
+        const matching = resp.data.page.history.filter(change => change.id === version)
         if (matching && Array.isArray(matching) && matching.length > 0) {
           req.viewOpts.page.version = matching[0]
         }
@@ -182,8 +182,8 @@ pages.get('*/history', getPage, checkMessages, async (req, res) => {
 pages.get('*/compare', getPage, checkMessages, async (req, res) => {
   const aid = Math.min(parseInt(req.query.a), parseInt(req.query.b))
   const bid = Math.max(parseInt(req.query.a), parseInt(req.query.b))
-  const a = getPageVersion(req.viewOpts.page.history.changes, `${aid}`)
-  const b = getPageVersion(req.viewOpts.page.history.changes, `${bid}`)
+  const a = getPageVersion(req.viewOpts.page.history, `${aid}`)
+  const b = getPageVersion(req.viewOpts.page.history, `${bid}`)
   const fields = {
     title: 'Title',
     path: 'Path',
