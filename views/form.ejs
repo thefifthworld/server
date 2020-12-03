@@ -33,7 +33,20 @@
           <p class="note">Should this page belong to another one? <span class="instructions">If so, provide the path to that other page here.</span></p>
         </label>
         <input id="parent" name="parent" type="text" value="<%= locals.failedAttempt ? failedAttempt.parent : locals.page && page.lineage && page.lineage.length > 0 ? page.lineage[page.lineage.length - 1].path : '' %>" />
-        <% if (locals.isUpload) { %>
+        <% if (locals.file) { %>
+        <label>Current file</label>
+        <% if (locals.page && page.type === 'Art') { %>
+        <div class="image-preview">
+          <img src="<%= file.urls.full %>" alt="<%= file.name %> (<%= file.mime %>; <%= file.size %>)" />
+        </div>
+        <% } else { %>
+        <a href="<%= file.urls.full %>" class="download" download>
+          <span class="label"><%= file.name %></span>
+          <span class="details"><%= file.mime %>; <%= file.size %></span>
+        </a>
+        <% } %>
+        <% } %>
+        <% if (locals.isUpload || locals.file) { %>
         <label for="file">File</label>
         <input type="file" name="file" id="file" />
         <% } %>
