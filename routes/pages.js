@@ -211,11 +211,12 @@ pages.get('*/compare', getPage, checkMessages, async (req, res) => {
 
 // GET */edit
 pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessages, async (req, res) => {
-  const { path, title, history } = req.viewOpts.page
+  const { path, title, history, files } = req.viewOpts.page
   const mostRecentChange = history && history.length > 0 ? history[history.length - 1] : false
   req.viewOpts.action = path
   req.viewOpts.meta.title = `Editing “${title}”`
   req.viewOpts.body = mostRecentChange && mostRecentChange.content ? mostRecentChange.content.body : false
+  req.viewOpts.file = files && Array.isArray(files) && files.length > 0 ? files[0] : false
   if (req.cookies.failedAttempt) {
     req.viewOpts.failedAttempt = JSON.parse(req.cookies.failedAttempt)
     res.clearCookie('failedAttempt', { httpOnly: true })
