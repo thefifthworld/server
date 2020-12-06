@@ -29,7 +29,12 @@
         <img src="<%= image.urls.full %>" alt="<%= meta.title %>" style="display:block;margin:1em auto;" />
       <% } %>
       <% } %>
+      <% if (page.cover) { %>
+      <img src="<%= page.cover %>" alt="<%= meta.title %>" class="cover" />
+      <% } %>
+      <% if (!page.type === 'Art' && !page.cover) { %>
       <h1><%= meta.title %></h1>
+      <% } %>
       <% if (page.type === 'File' && page.files) { %>
       <%
         const files = page.files.filter(file => !file.mime.startsWith('image/'))

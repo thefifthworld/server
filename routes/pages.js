@@ -101,6 +101,32 @@ const getPage = async (req, res, next) => {
 }
 
 /**
+ * Express.js middleware that loads the cover for a novel, if one exists.
+ * @param req {Object} - The Express.js request object.
+ * @param res {Object} - The Express.js response object.
+ * @param next {function} - The next function to be called.
+ * @returns {Promise} - A Promise that resolves when it's finished checking the
+ *   API for a cover for the novel, and if found, attached the URL for the
+ *   cover image to the page object as a `cover` property.
+ */
+
+const getCover = async (req, res, next) => {
+  const { page } = req.viewOpts
+  if (page.type === 'Novel') {
+    try {
+      const resp = await callAPI('GET', `/pages?tag=Cover:${encodeURIComponent(page.title)}`)
+      const isOK = resp && resp.status === 200
+      const hasData = isOK && resp.data && Array.isArray(resp.data) && resp.data.length > 0
+      const hasFiles = hasData && resp.data[0].files && Array.isArray(resp.data[0].files) && resp.data[0].files.length > 0
+      if (hasFiles && resp.data[0].files[0].urls && resp.data[0].files[0].urls.full) {
+        req.viewOpts.page.cover = resp.data[0].files[0].urls.full
+      }
+    } catch {}
+  }
+  next()
+}
+
+/**
  * Returns the version from a page with a given ID.
  * @param changes {Object[]} - The array of the changes made to the page.
  * @param vstr {string} - The string representing the ID of the change you want
@@ -297,7 +323,7 @@ pages.get('*/rollback/:id', requireLoggedIn, getPage, requirePageWriteAccess, as
 })
 
 // GET *
-pages.get('*', getPage, checkMessages, async (req, res) => {
+pages.get('*', getPage, getCover, checkMessages, async (req, res) => {
   res.render('page', req.viewOpts)
 })
 
