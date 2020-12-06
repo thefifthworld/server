@@ -32,7 +32,7 @@
       <% if (page.cover) { %>
       <img src="<%= page.cover %>" alt="<%= meta.title %>" class="cover" />
       <% } %>
-      <% if (!page.type === 'Art' && !page.cover) { %>
+      <% if (page.type !== 'Art' && !page.cover) { %>
       <h1><%= meta.title %></h1>
       <% } %>
       <% if (page.type === 'File' && page.files) { %>
