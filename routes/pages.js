@@ -174,7 +174,7 @@ pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
   req.viewOpts.action = '/new'
   req.viewOpts.meta.title = 'New Page'
   if (req.cookies.failedAttempt) {
-    req.viewOpts.failedAttempt = JSON.parse(req.cookies.failedAttempt)
+    req.viewOpts.failedAttempt = req.cookies.failedAttempt
     res.clearCookie('failedAttempt', { httpOnly: true })
   }
   res.render('form', req.viewOpts)
@@ -186,7 +186,8 @@ pages.post('/new', requireLoggedIn, useMulter, convertMulter, async (req, res, n
     const page = await callAPI('POST', `/pages`, req.cookies.jwt, req.body)
     res.redirect(302, page.data.path)
   } catch (err) {
-    res.cookie('failedAttempt', err.config.data, { httpOnly: true })
+    const error = Object.assign({}, JSON.parse(err.response.config.data), { error: err.response.data.error })
+    res.cookie('failedAttempt', error, { httpOnly: true })
     res.redirect('/new')
   }
 })
