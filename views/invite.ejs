@@ -22,12 +22,12 @@
         </thead>
         <tbody>
         <% invited.forEach(acct => { %>
-        <% if (acct.active && acct.nopass) { %>
+        <% if (acct.nopass) { %>
           <tr>
             <td><%= acct.email %></td>
             <td class="short">Invited</td>
           </tr>
-        <% } else if (acct.active) { %>
+        <% } else { %>
           <tr>
             <td><a href="/members/<%= acct.id %>"><%= acct.name || acct.email %></a></td>
             <td class="short">Member</td>
