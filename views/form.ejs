@@ -27,7 +27,7 @@
           <p class="note">This sets the page&rsquo;s URL. If left blank, it will default to a &ldquo;slugified&rdquo; version of the title (e.g., &ldquo;New Page&rdquo; will become <code>/new-page</code>).</p>
         </label>
         <input id="path" name="path" type="text" placeholder="/example" value="<%= locals.failedAttempt ? failedAttempt.path : locals.page ? page.path : '' %>"<% if (locals.failedAttempt) { %> class="error"<% } %> />
-        <% if (locals.failedAttempt) { %><p class="error">Sorry, that won&rsquo;t work. A page with the path <code><%= failedAttempt.path %></code> already exists.</p><% } %>
+        <% if (locals.failedAttempt) { %><p class="error"><%- locals.failedAttempt.error %></p><% } %>
         <label for="parent">
           Parent
           <p class="note">Should this page belong to another one? <span class="instructions">If so, provide the path to that other page here.</span></p>
