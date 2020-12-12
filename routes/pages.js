@@ -331,8 +331,9 @@ pages.get('*', getPage, getCover, checkMessages, async (req, res) => {
 // POST *
 pages.post('*', requireLoggedIn, getPage, requirePageWriteAccess, useMulter, convertMulter, async (req, res) => {
   try {
-    await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
-    res.redirect(302, req.originalUrl)
+    const resp = await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
+    req.viewOpts.page = resp.data
+    res.redirect(302, req.viewOpts.page.path)
   } catch (err) {
     res.cookie('failedAttempt', err.config.data, { httpOnly: true })
     res.redirect(302, `${req.originalUrl}/edit`)
