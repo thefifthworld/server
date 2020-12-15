@@ -1,6 +1,5 @@
 const jsonwebtoken = require('jsonwebtoken')
 const callAPI = require('./api')
-const config = require('./config')
 const helpers = require('./helpers')
 
 /**
@@ -23,21 +22,16 @@ const initViewOpts = (req, res, next) => {
 }
 
 /**
- * A universal middleware for Express.js that set verifies the JSON Web Token
- * stored in the cookie and saves its payload to `req.user`.
+ * A universal middleware for Express.js that decodes the JSON Web Token stored
+ * in the `jwt` cookie and saves its contents to `req.viewOpts.member` and
+ * `req.user`.
  * @param req {Object} - The Express.js request object.
  * @param res {Object} - The Express.js response object.
  * @param next {function} - The next function to call.
- * @returns {Promise<void>} - A Promise that resolves when the middleware has
- *   been executed.
  */
 
-const verifyJWT = async (req, res, next) => {
-  if (req.cookies.jwt) {
-    const token = await jsonwebtoken.verify(req.cookies.jwt, config.jwt.secret)
-    req.user = token
-    req.viewOpts.member = req.user
-  }
+const getUser = (req, res, next) => {
+  if (req.cookies.jwt) req.user = req.viewOpts.member = jsonwebtoken.decode(req.cookies.jwt)
   next()
 }
 
@@ -96,7 +90,7 @@ const error500 = (err, req, res, next) => {
 
 module.exports = {
   initViewOpts,
-  verifyJWT,
+  getUser,
   renewJWT,
   error404,
   error500
