@@ -7,7 +7,7 @@ const config = require('./config')
 const { initializePassport } = require('./auth')
 const {
   initViewOpts,
-  verifyJWT,
+  getUser,
   renewJWT,
   error404,
   error500
@@ -30,7 +30,7 @@ server.use(passport.session())
 initializePassport(passport)
 
 server.use(initViewOpts)
-server.use(verifyJWT)
+server.use(getUser)
 server.use(renewJWT)
 
 server.use('/', login)
