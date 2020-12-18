@@ -1,58 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('includes/head', { meta }) %>
-<body class="thefifthworld">
-<%- include('includes/header', { member }) %>
-<main>
-  <%- include('includes/messages', { messages }) %>
-  <% if (page.lineage && page.lineage.length > 0) { %>
-    <nav class="breadcrumbs">
-      <ul class="breadcrumbs">
-        <% page.lineage.forEach(ancestor => { %>
-          <li><a href="<%= ancestor.path %>"><%= ancestor.title %></a></li>
-        <% }) %>
-        <li><a href="<%= page.path %>"><%= page.title %></a></li>
-        <li class="current">History</li>
-      </ul>
-    </nav>
-  <% } %>
-  <h1><%= meta.title %></h1>
-  <% if (page && page.history && Array.isArray(page.history) && page.history.length > 0) { %>
-  <form action="<%= page.path %>/compare" method="GET">
-    <table class="history">
-      <thead>
-        <tr>
-          <th />
-          <th />
-          <th>Summary</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% page.history.forEach(change => { %>
-        <tr>
-          <td><input type="radio" name="a" value="<%= change.id %>" /></td>
-          <td><input type="radio" name="b" value="<%= change.id %>" /></td>
-          <td>
-            <%= change.msg %>
-            <p class="details">
-              Change made by <a href="/member/<%= change.editor.id %>"><%= change.editor.name %></a>,
-              <a href="<%= page.path %>/<%= change.id %>"><%- helpers.formatTimestamp(change.timestamp) %></a>
-            </p>
-          </td>
-        </tr>
-      <% }) %>
-      </tbody>
-    </table>
-    <button>Compare Selected Versions</button>
-  </form>
-  <% } %>
-  <p class="buttons page-actions">
-    <% if (page.permissions.write) { %>
-      <a href="<%= page.path %>/edit" class="button">Edit Page</a>
-    <% } %>
-    <a href="<%= page.path %>/history" class="button secondary">View Page History</a>
-  </p>
-</main>
-<%- include('includes/footer') %>
-</body>
+  <%- include('includes/head', { meta }) %>
+  <body class="thefifthworld">
+    <%- include('includes/header', { member }) %>
+    <main>
+      <%- include('includes/messages', { messages }) %>
+      <% if (page.lineage && page.lineage.length > 0) { %>
+        <nav class="breadcrumbs">
+          <ul class="breadcrumbs">
+            <% page.lineage.forEach(ancestor => { %>
+              <li><a href="<%= ancestor.path %>"><%= ancestor.title %></a></li>
+            <% }) %>
+            <li><a href="<%= page.path %>"><%= page.title %></a></li>
+            <li class="current">History</li>
+          </ul>
+        </nav>
+      <% } %>
+      <h1><%= meta.title %></h1>
+      <% if (page && page.history && Array.isArray(page.history) && page.history.length > 0) { %>
+      <form action="<%= page.path %>/compare" method="GET">
+        <table class="history">
+          <thead>
+            <tr>
+              <th />
+              <th />
+              <th>Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% page.history.forEach(change => { %>
+            <tr>
+              <td><input type="radio" name="a" value="<%= change.id %>" /></td>
+              <td><input type="radio" name="b" value="<%= change.id %>" /></td>
+              <td>
+                <%= change.msg %>
+                <p class="details">
+                  Change made by <a href="/member/<%= change.editor.id %>"><%= change.editor.name %></a>,
+                  <a href="<%= page.path %>/<%= change.id %>"><%- helpers.formatTimestamp(change.timestamp) %></a>
+                </p>
+              </td>
+            </tr>
+          <% }) %>
+          </tbody>
+        </table>
+        <button>Compare Selected Versions</button>
+      </form>
+      <% } %>
+      <p class="buttons page-actions">
+        <% if (page.permissions.write) { %>
+          <a href="<%= page.path %>/edit" class="button">Edit Page</a>
+        <% } %>
+        <a href="<%= page.path %>/history" class="button secondary">View Page History</a>
+      </p>
+      <%- include('includes/session') %>
+    </main>
+    <%- include('includes/footer') %>
+  </body>
 </html>

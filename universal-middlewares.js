@@ -31,7 +31,26 @@ const initViewOpts = (req, res, next) => {
  */
 
 const getUser = (req, res, next) => {
-  if (req.cookies.jwt) req.user = req.viewOpts.member = jsonwebtoken.decode(req.cookies.jwt)
+  if (req.cookies.jwt) {
+    req.user = req.viewOpts.member = jsonwebtoken.decode(req.cookies.jwt)
+    const expire = new Date(req.user.exp * 1000)
+    const now = new Date()
+    const diff = expire - now
+    const m = Math.floor(diff / 60000)
+    const s = Math.floor((diff - (m * 60000)) / 1000)
+    const min = m === 1 ? '1 minute' : `${m} minutes`
+    const sec = s === 1 ? '1 second' : `${s} seconds`
+    const yr = expire.getUTCFullYear()
+    const mo = expire.getUTCMonth() + 1
+    const dy = expire.getUTCDate()
+    const hr = expire.getUTCHours()
+    const mn = expire.getUTCMinutes()
+    const machine = `${yr}-${mo.toString().padStart(2, '0')}-${dy.toString().padStart(2, '0')}T${hr.toString().padStart(2, '0')}:${mn.toString().padStart(2, '0')}`
+    const human = `${hr}:${mn.toString().padStart(2, '0')} UTC`
+    const expireIn = m > 0 ? `${min} and ${sec}` : sec
+    const expireAt = `<time datetime="${machine}">${human}</time>`
+    req.user.sessionExpireMsg = `<p>Your session will expire in ${expireIn}, at ${expireAt}.</p>`
+  }
   next()
 }
 
