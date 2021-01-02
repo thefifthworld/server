@@ -201,6 +201,11 @@ pages.get('/upload', requireLoggedIn, checkMessages, async (req, res, next) => {
   res.render('form', req.viewOpts)
 })
 
+// GET /explore
+pages.get('/explore', async (req, res) => {
+  res.render('explore', req.viewOpts)
+})
+
 // GET */history
 pages.get('*/history', getPage, checkMessages, async (req, res) => {
   res.render('page-history', req.viewOpts)
