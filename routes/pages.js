@@ -80,6 +80,7 @@ const getPage = async (req, res, next) => {
     const endpoint = isVersion ? `/pages${url}?version=${version}` : `/pages${url}`
     const resp = await callAPI('GET', endpoint, req.cookies.jwt)
     req.viewOpts.meta.title = resp.data.page.title
+    req.viewOpts.meta.desc = resp.data.page.description
     req.viewOpts.page = resp.data.page
     req.viewOpts.markup = resp.data.markup
 
