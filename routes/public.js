@@ -5,7 +5,7 @@ const pub = express.Router()
 pub.get('/', async (req, res) => {
   res.render('home', {
     member: req.user,
-    meta: {}
+    meta: req.viewOpts.meta
   })
 })
 

@@ -1,6 +1,7 @@
 const jsonwebtoken = require('jsonwebtoken')
 const callAPI = require('./api')
 const helpers = require('./helpers')
+const config = require('./config')
 
 /**
  * A universal middleware for Express.js that sets up a common view options
@@ -15,6 +16,7 @@ const initViewOpts = (req, res, next) => {
     helpers,
     member: null,
     meta: {
+      monetization: config.monetization,
       url: `${req.protocol}://${req.get('host')}${req.originalUrl}`
     }
   }
