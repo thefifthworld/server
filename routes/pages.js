@@ -176,6 +176,7 @@ pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
   req.viewOpts.meta.title = 'New Page'
   req.viewOpts.sessionExpireMsg = req.user.sessionExpireMsg
   req.viewOpts.reauthEndpoint = req.user.reauthEndpoint
+  req.viewOpts.title = req.query.title
   if (req.cookies.failedAttempt) {
     req.viewOpts.failedAttempt = req.cookies.failedAttempt
     res.clearCookie('failedAttempt', { httpOnly: true })
@@ -254,8 +255,10 @@ pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessa
   req.viewOpts.file = files && Array.isArray(files) && files.length > 0 ? files[0] : false
   req.viewOpts.sessionExpireMsg = req.user.sessionExpireMsg
   req.viewOpts.reauthEndpoint = req.user.reauthEndpoint
+  req.viewOpts.title = title
   if (req.cookies.failedAttempt) {
     req.viewOpts.failedAttempt = JSON.parse(req.cookies.failedAttempt)
+    req.viewOpts.title = req.viewOpts.failedAttempt.title
     res.clearCookie('failedAttempt', { httpOnly: true })
   }
   res.render('form', req.viewOpts)
