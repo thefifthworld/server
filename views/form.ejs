@@ -21,7 +21,7 @@
       <h1><%= meta.title %></h1>
       <form action="<%= action %>" method="POST" class="page" enctype="multipart/form-data">
         <label for="title">Title</label>
-        <input id="title" name="title" type="text" placeholder="What do you want to write about?" value="<%= locals.failedAttempt ? failedAttempt.title : locals.page ? page.title : '' %>" />
+        <input id="title" name="title" type="text" placeholder="What do you want to write about?" value="<%= locals.title ? title : '' %>" />
         <label for="path"<% if (locals.failedAttempt) { %> class="error"<% } %>>
           Path
           <p class="note">This sets the page&rsquo;s URL. If left blank, it will default to a &ldquo;slugified&rdquo; version of the title (e.g., &ldquo;New Page&rdquo; will become <code>/new-page</code>).</p>
