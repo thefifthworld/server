@@ -35,6 +35,7 @@ const initViewOpts = (req, res, next) => {
 const getUser = (req, res, next) => {
   if (req.cookies.jwt) {
     req.user = req.viewOpts.member = jsonwebtoken.decode(req.cookies.jwt)
+    req.user.reauthEndpoint = `${config.api.root}/members/reauth`
     const expire = new Date(req.user.exp * 1000)
     const now = new Date()
     const diff = expire - now
@@ -72,9 +73,13 @@ const renewJWT = async (req, res, next) => {
     const now = new Date().getTime()
     const minutes = (now - issued) / 60000
     if (minutes > 5) {
-      const resp = await callAPI('POST', '/members/reauth', req.cookies.jwt)
-      if (resp.status === 200) {
-        res.cookie('jwt', resp.data, { maxAge: 900000 })
+      try {
+        const resp = await callAPI('POST', '/members/reauth', req.cookies.jwt)
+        if (resp.status === 200) {
+          res.cookie('jwt', resp.data, { maxAge: 900000 })
+        }
+      } catch (err) {
+        res.clearCookie('jwt')
       }
     }
   }
