@@ -16,15 +16,19 @@ const callAPI = async (method, endpoint, jwt, data) => {
   if (jwt) opts.headers = { Authorization: `Bearer ${jwt}` }
   const url = `${config.api.root}${endpoint}`
 
-  let res
-  switch (method.toUpperCase()) {
-    case 'DELETE': res = await axios.delete(url, opts); break
-    case 'POST': res = await axios.post(url, data, opts); break
-    case 'PUT': res = await axios.put(url, data, opts); break
-    case 'PATCH': res = await axios.patch(url, data, opts); break
-    default: res = await axios.get(url, opts); break
+  try {
+    let res
+    switch (method.toUpperCase()) {
+      case 'DELETE': res = await axios.delete(url, opts); break
+      case 'POST': res = await axios.post(url, data, opts); break
+      case 'PUT': res = await axios.put(url, data, opts); break
+      case 'PATCH': res = await axios.patch(url, data, opts); break
+      default: res = await axios.get(url, opts); break
+    }
+    return res
+  } catch (err) {
+    return null
   }
-  return res
 }
 
 module.exports = callAPI

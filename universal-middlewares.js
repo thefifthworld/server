@@ -72,9 +72,13 @@ const renewJWT = async (req, res, next) => {
     const now = new Date().getTime()
     const minutes = (now - issued) / 60000
     if (minutes > 5) {
-      const resp = await callAPI('POST', '/members/reauth', req.cookies.jwt)
-      if (resp.status === 200) {
-        res.cookie('jwt', resp.data, { maxAge: 900000 })
+      try {
+        const resp = await callAPI('POST', '/members/reauth', req.cookies.jwt)
+        if (resp.status === 200) {
+          res.cookie('jwt', resp.data, { maxAge: 900000 })
+        }
+      } catch (err) {
+        res.clearCookie('jwt')
       }
     }
   }
