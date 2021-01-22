@@ -35,6 +35,7 @@ const initViewOpts = (req, res, next) => {
 const getUser = (req, res, next) => {
   if (req.cookies.jwt) {
     req.user = req.viewOpts.member = jsonwebtoken.decode(req.cookies.jwt)
+    req.user.reauthEndpoint = `${config.api.root}/members/reauth`
     const expire = new Date(req.user.exp * 1000)
     const now = new Date()
     const diff = expire - now
