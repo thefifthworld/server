@@ -209,6 +209,13 @@ pages.get('/explore', async (req, res) => {
   res.render('explore', req.viewOpts)
 })
 
+// POST /save-form
+pages.post('/save-form', async (req, res) => {
+  await callAPI('POST', '/response', req.cookies.jwt, Object.assign({}, { form: req.body.form, data: JSON.stringify(req.body) }))
+  const returnURL = req.body.returnURL || '/'
+  res.redirect(returnURL)
+})
+
 // GET */history
 pages.get('*/history', getPage, checkMessages, async (req, res) => {
   res.render('page-history', req.viewOpts)
