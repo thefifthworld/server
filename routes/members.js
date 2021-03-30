@@ -11,6 +11,7 @@ members.get('/welcome', requireLoggedIn, async (req, res, next) => {
     req.viewOpts.profile = resp.data
     req.viewOpts.welcome = true
     req.viewOpts.meta.title = 'Set Up Your Profile'
+    req.viewOpts.messages = []
     res.render('member-form', req.viewOpts)
   } else {
     next('Couldn\'t load profile of person on /welcome')
