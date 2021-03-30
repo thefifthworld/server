@@ -34,7 +34,7 @@ members.get('/member/:id', checkMessages, async (req, res, next) => {
 
 // GET /members/:id/edit
 members.get('/member/:id/edit', checkMessages, async (req, res, next) => {
-  if (req.user && (req.user === req.params.id || req.user.admin)) {
+  if (req.user && (req.user.id === parseInt(req.params.id) || req.user.admin)) {
     const resp = await callAPI('GET', `/members/${req.params.id}`)
     if (resp && resp.status === 200) {
       req.viewOpts.profile = resp.data
