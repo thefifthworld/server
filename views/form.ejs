@@ -62,6 +62,11 @@
             <p class="note">A short description added to the head of the page, used by search engines and other robots. If you don’t want to write a description, we’ll make one from the first few sentences of the page. If you’d like to write your own description, it has to remain shorter than 240 characters.</p>
           </label>
           <textarea name="description" id="description" data-char-count="240"><%= locals.failedAttempt ? failedAttempt.description : locals.page && page.description ? page.description : '' %></textarea>
+          <label for="description">
+            Structured Data
+            <p class="note">You can attach structured data to this page for special use cases. Use an array of objects, so that a page can accommodate multiple objects. You might not need it now, but that could change in the future.</p>
+          </label>
+          <textarea name="data" id="data" class="json" style="font-family: 'Courier New', monospace; font-size: 0.618em;"><%= locals.failedAttempt ? failedAttempt.data : locals.data || '' %></textarea>
           <label for="image">
             Image
             <p class="note">Image used by social media when you share this page.</p>
