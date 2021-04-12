@@ -259,6 +259,7 @@ pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessa
   req.viewOpts.action = path
   req.viewOpts.meta.title = `Editing “${title}”`
   req.viewOpts.body = mostRecentChange && mostRecentChange.content ? mostRecentChange.content.body : false
+  req.viewOpts.data = mostRecentChange && mostRecentChange.content ? mostRecentChange.content.data : false
   req.viewOpts.file = files && Array.isArray(files) && files.length > 0 ? files[0] : false
   req.viewOpts.sessionExpireMsg = req.user.sessionExpireMsg
   req.viewOpts.reauthEndpoint = req.user.reauthEndpoint
