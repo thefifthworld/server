@@ -174,8 +174,6 @@ const requirePageWriteAccess = (req, res, next) => {
 pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
   req.viewOpts.action = '/new'
   req.viewOpts.meta.title = 'New Page'
-  req.viewOpts.sessionExpireMsg = req.user.sessionExpireMsg
-  req.viewOpts.reauthEndpoint = req.user.reauthEndpoint
   req.viewOpts.title = req.query.title
   if (req.cookies.failedAttempt) {
     req.viewOpts.failedAttempt = req.cookies.failedAttempt
@@ -261,8 +259,6 @@ pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessa
   req.viewOpts.body = mostRecentChange && mostRecentChange.content ? mostRecentChange.content.body : false
   req.viewOpts.data = mostRecentChange && mostRecentChange.content ? mostRecentChange.content.data : false
   req.viewOpts.file = files && Array.isArray(files) && files.length > 0 ? files[0] : false
-  req.viewOpts.sessionExpireMsg = req.user.sessionExpireMsg
-  req.viewOpts.reauthEndpoint = req.user.reauthEndpoint
   req.viewOpts.title = title
   if (req.cookies.failedAttempt) {
     req.viewOpts.failedAttempt = JSON.parse(req.cookies.failedAttempt)
