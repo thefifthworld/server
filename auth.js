@@ -103,6 +103,8 @@ const initializePassport = passport => {
 
 const requireLoggedIn = async (req, res, next) => {
   if (req.user) {
+    req.viewOpts.sessionExpireMsg = req.user.sessionExpireMsg
+    req.viewOpts.reauthEndpoint = req.user.reauthEndpoint
     return next()
   } else {
     return res.status(401).render('login', req.viewOpts)
