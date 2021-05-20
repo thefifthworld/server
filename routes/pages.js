@@ -196,22 +196,24 @@ const populateForm = (req, res, next) => {
 }
 
 // GET /new
-pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
+pages.get('/new', requireLoggedIn, checkMessages, populateForm, async (req, res, next) => {
   req.viewOpts.action = '/new'
   req.viewOpts.meta.title = 'New Page'
   req.viewOpts.title = req.query.title
-  if (req.cookies.failedAttempt) {
-    req.viewOpts.failedAttempt = req.cookies.failedAttempt
-    res.clearCookie('failedAttempt', { httpOnly: true })
-  }
   res.render('form', req.viewOpts)
 })
 
 // POST /new
 pages.post('/new', requireLoggedIn, useMulter, convertMulter, async (req, res, next) => {
   try {
-    const page = await callAPI('POST', `/pages`, req.cookies.jwt, req.body)
-    res.redirect(302, page.data.path)
+    if (req.body.preview === 'Preview') {
+      const resp = await callAPI('POST', '/parse', req.cookies.jwt, { str: req.body.body, path: req.body.path })
+      res.cookie('preview', Object.assign({}, req.body, { preview: resp.data.html }), { httpOnly: true })
+      res.redirect(req.originalUrl)
+    } else {
+      const page = await callAPI('POST', `/pages`, req.cookies.jwt, req.body)
+      res.redirect(302, page.data.path)
+    }
   } catch (err) {
     const error = Object.assign({}, JSON.parse(err.response.config.data), { error: err.response.data.error })
     res.cookie('failedAttempt', error, { httpOnly: true })
