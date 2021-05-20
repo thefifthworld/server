@@ -19,6 +19,10 @@
       </nav>
       <% } %>
       <h1><%= meta.title %></h1>
+      <% if (locals.existing?.preview) { %>
+      <h2>Preview</h2>
+      <%- existing.preview %>
+      <% } %>
       <form action="<%= action %>" method="POST" class="page" enctype="multipart/form-data">
         <label for="title">Title</label>
         <input id="title" name="title" type="text" placeholder="What do you want to write about?" value="<%= locals.title ? title : '' %>" />
