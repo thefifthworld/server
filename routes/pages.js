@@ -1,11 +1,14 @@
 const express = require('express')
 const multer = require('multer')
 const Diff = require('text-diff')
+const storage = require('node-persist')
 const callAPI = require('../api')
 const { checkMessages, requireLoggedIn } = require('../auth')
 
 const pages = express.Router()
 const upload = multer()
+const initStorage = async () => await storage.init()
+initStorage()
 
 /**
  * Convert a single file from Multer to the format accepted by our API.
@@ -179,19 +182,15 @@ const requirePageWriteAccess = (req, res, next) => {
  * @returns {*} - The next function.
  */
 
-const populateForm = (req, res, next) => {
-  if (req.cookies.preview) {
-    req.viewOpts.existing = req.cookies.preview
-    res.clearCookie('preview', { httpOnly: true })
-  }
-
-  if (req.cookies.failedAttempt) {
-    req.viewOpts.existing = JSON.parse(req.cookies.failedAttempt)
-    res.clearCookie('failedAttempt', { httpOnly: true })
+const populateForm = async (req, res, next) => {
+  const key = `${req.user.id}-existing`
+  const keys = await storage.keys()
+  if (keys.includes(key)) {
+    req.viewOpts.existing = await storage.getItem(key)
+    await storage.removeItem(key)
   }
 
   if (req.viewOpts.existing?.title) req.viewOpts.title = req.viewOpts.existing.title
-
   return next()
 }
 
@@ -208,15 +207,14 @@ pages.post('/new', requireLoggedIn, useMulter, convertMulter, async (req, res, n
   try {
     if (req.body.preview === 'Preview') {
       const resp = await callAPI('POST', '/parse', req.cookies.jwt, { str: req.body.body, path: req.body.path })
-      res.cookie('preview', Object.assign({}, req.body, { preview: resp.data.html }), { httpOnly: true })
+      await storage.setItem(`${req.user.id}-existing`, Object.assign({}, req.body, { preview: resp.data.html }))
       res.redirect(req.originalUrl)
     } else {
       const page = await callAPI('POST', `/pages`, req.cookies.jwt, req.body)
       res.redirect(302, page.data.path)
     }
   } catch (err) {
-    const error = Object.assign({}, JSON.parse(err.response.config.data), { error: err.response.data.error })
-    res.cookie('failedAttempt', error, { httpOnly: true })
+    await storage.setItem(`${req.user.id}-existing`, Object.assign({}, JSON.parse(err.response.config.data), { error: err.response.data.error }))
     res.redirect('/new')
   }
 })
@@ -373,7 +371,7 @@ pages.post('*', requireLoggedIn, getPage, requirePageWriteAccess, useMulter, con
   try {
     if (req.body.preview === 'Preview') {
       const resp = await callAPI('POST', '/parse', req.cookies.jwt, { str: req.body.body, path: req.body.path })
-      res.cookie('preview', Object.assign({}, req.body, { preview: resp.data.html }), { httpOnly: true })
+      await storage.setItem(`${req.user.id}-existing`, Object.assign({}, req.body, { preview: resp.data.html }))
     } else {
       const resp = await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
       req.viewOpts.page = resp.data
@@ -381,7 +379,7 @@ pages.post('*', requireLoggedIn, getPage, requirePageWriteAccess, useMulter, con
     }
     res.redirect(302, url)
   } catch (err) {
-    res.cookie('failedAttempt', err.config.data, { httpOnly: true })
+    await storage.setItem(`${req.user.id}-existing`, err.config.data)
     res.redirect(302, url)
   }
 })
