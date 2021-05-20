@@ -170,6 +170,31 @@ const requirePageWriteAccess = (req, res, next) => {
   }
 }
 
+/**
+ * Express.js middleware for loading an existing version of the page for the
+ * form to populate.
+ * @param req {Object} - The Express.js request object.
+ * @param res {Object} - The Express.js response object.
+ * @param next {function} - The next function to be called.
+ * @returns {*} - The next function.
+ */
+
+const populateForm = (req, res, next) => {
+  if (req.cookies.preview) {
+    req.viewOpts.existing = req.cookies.preview
+    res.clearCookie('preview', { httpOnly: true })
+  }
+
+  if (req.cookies.failedAttempt) {
+    req.viewOpts.existing = JSON.parse(req.cookies.failedAttempt)
+    res.clearCookie('failedAttempt', { httpOnly: true })
+  }
+
+  if (req.viewOpts.existing?.title) req.viewOpts.title = req.viewOpts.existing.title
+
+  return next()
+}
+
 // GET /new
 pages.get('/new', requireLoggedIn, checkMessages, async (req, res, next) => {
   req.viewOpts.action = '/new'
@@ -251,7 +276,7 @@ pages.get('*/compare', getPage, checkMessages, async (req, res) => {
 })
 
 // GET */edit
-pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessages, async (req, res) => {
+pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessages, populateForm, async (req, res) => {
   const { path, title, history, files } = req.viewOpts.page
   const mostRecentChange = history && history.length > 0 ? history[history.length - 1] : false
   req.viewOpts.action = path
@@ -260,11 +285,6 @@ pages.get('*/edit', requireLoggedIn, getPage, requirePageWriteAccess, checkMessa
   req.viewOpts.data = mostRecentChange && mostRecentChange.content ? mostRecentChange.content.data : false
   req.viewOpts.file = files && Array.isArray(files) && files.length > 0 ? files[0] : false
   req.viewOpts.title = title
-  if (req.cookies.failedAttempt) {
-    req.viewOpts.failedAttempt = JSON.parse(req.cookies.failedAttempt)
-    req.viewOpts.title = req.viewOpts.failedAttempt.title
-    res.clearCookie('failedAttempt', { httpOnly: true })
-  }
   res.render('form', req.viewOpts)
 })
 
