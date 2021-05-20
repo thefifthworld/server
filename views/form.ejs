@@ -81,6 +81,7 @@
         <%- include('includes/pulse', { sessionExpireMsg, reauthEndpoint }) %>
         <p class="buttons page-actions">
           <button><%= locals.page ? 'Save' : locals.isUpload ? 'Upload' : 'Create' %></button>
+          <button class="secondary" name="preview" value="Preview">Preview</button>
           <% if (locals.page && locals.member && member.admin) { %><input type="button" class="secondary" name="lock" value="Lock" /><% } %>
           <% if (locals.page && locals.member && member.admin) { %><input type="button" class="secondary" name="hide" value="Hide" /><% } %>
           <a href="<%= locals.page ? page.path : '/dashboard' %>" class="button secondary">Cancel</a>
