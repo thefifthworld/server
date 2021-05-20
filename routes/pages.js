@@ -367,13 +367,20 @@ pages.get('*', getPage, getCover, checkMessages, async (req, res) => {
 
 // POST *
 pages.post('*', requireLoggedIn, getPage, requirePageWriteAccess, useMulter, convertMulter, async (req, res) => {
+  let url = `${req.originalUrl}/edit`
   try {
-    const resp = await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
-    req.viewOpts.page = resp.data
-    res.redirect(302, req.viewOpts.page.path)
+    if (req.body.preview === 'Preview') {
+      const resp = await callAPI('POST', '/parse', req.cookies.jwt, { str: req.body.body, path: req.body.path })
+      res.cookie('preview', Object.assign({}, req.body, { preview: resp.data.html }), { httpOnly: true })
+    } else {
+      const resp = await callAPI('POST', `/pages${req.originalUrl}`, req.cookies.jwt, req.body)
+      req.viewOpts.page = resp.data
+      url = req.viewOpts.page.path
+    }
+    res.redirect(302, url)
   } catch (err) {
     res.cookie('failedAttempt', err.config.data, { httpOnly: true })
-    res.redirect(302, `${req.originalUrl}/edit`)
+    res.redirect(302, url)
   }
 })
 
