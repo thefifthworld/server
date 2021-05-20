@@ -30,7 +30,7 @@
           Path
           <p class="note">This sets the page&rsquo;s URL. If left blank, it will default to a &ldquo;slugified&rdquo; version of the title (e.g., &ldquo;New Page&rdquo; will become <code>/new-page</code>).</p>
         </label>
-        <input id="path" name="path" type="text" placeholder="/example" value="<%= locals.existing ? existing.path : locals.page ? page.path : '' %>"<% if (locals.existing) { %> class="error"<% } %> />
+        <input id="path" name="path" type="text" placeholder="/example" value="<%= locals.existing ? existing.path : locals.page ? page.path : '' %>"<% if (locals.existing?.error) { %> class="error"<% } %> />
         <% if (locals.existing) { %><p class="error"><%- locals.existing.error %></p><% } %>
         <label for="parent">
           Parent
