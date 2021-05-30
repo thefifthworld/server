@@ -56,29 +56,33 @@
           <li><a disabled="" title="Coming soon" class="button">Upload Art</a></li>
         </ul>
       </section>
+      <p>Unsure where to start? Read more about <a href="/how-to-contribute">how to contribute</a>.</p>
 
-      <!-- Your Membership -->
-      <section class="action-cols">
-        <h3>Your Membership</h3>
-        <ul>
-          <li>
-            <a href="/member/<%= member.id %>/edit" class="button">Your Profile</a>
-            <p>Update your name, email, and password, and decide what you want to share about your activity on the Fifth World.</p>
-          </li>
-          <li>
-            <a href="/connect" class="button">Connect</a>
-            <p>Connect other services like Facebook, Twitter, Patreon, Google, or Github, so you can use them to log in.</p
-          </li>
-          <li>
-            <a href="/invite" class="button">Invitations</a>
-            <p>Invite your friends to join the Fifth World, and see a list of all the members that you invited.</p>
-          </li>
-          <li>
-            <a href="https://discord.gg/<%= discordCode %>" class="button">Chat</a>
-            <p>Join the Fifth World Discord server to chat with other members.</p>
-          </li>
-        </ul>
+      <!-- Discord -->
+      <section>
+        <h2>The Fifth World Discord Server</h2>
+        <p>We use this website to create the Fifth World, so you won&rsquo;t find comments or forums here. Instead, we have <a href="https://discord.gg/<%= discordCode %>">the Fifth World Discord server</a>, which provides the social hub for our community. We run games and events, talk about the Fifth World and the ideas behind it, plan our work, post memes, and hang out there, and we&rsquo;d love for you to join us!</p>
+        <p><a href="https://discord.gg/<%= discordCode %>" class="button">Join the Discord Server</a></p>
       </section>
+
+      <!-- Membership -->
+      <section>
+        <h2>Your Membership</h2>
+        <p>Your profile includes your name, email, and password, but you can decide what you want to share about yourself with the world.</p>
+        <p class="buttons">
+          <a href="/member/<%= member.id %>/edit" class="button">Edit Your Profile</a>
+          <a href="/member/<%= member.id %>/edit" class="button secondary">View Your Profile</a>
+        </p>
+        <p>You can connect other services (Facebook, Twitter, Patreon, Google, or Github) and use them to sign into the Fifth World.</p>
+        <p class="buttons">
+          <a href="/connect" class="button">Connect Services</a>
+        </p>
+        <p>You can invite others to join the Fifth World, and see a list of all the people that you have invited.</p>
+        <p class="buttons">
+          <a href="/invite" class="button">Invitations</a>
+        </p>
+      </section>
+
       <%- include('includes/session') %>
     </main>
     <%- include('includes/footer') %>
