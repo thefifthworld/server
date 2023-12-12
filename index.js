@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const passport = require('passport')
+const session = require('express-session')
 
 const config = require('./config')
 const { initializePassport } = require('./auth')
@@ -25,6 +26,11 @@ server.use(bodyParser.json())
 server.use(cookieParser())
 
 // Set up Passport
+server.use(session({
+  secret: process.env.SESSION_SECRET || '0123456789default_secret9876543210',
+  resave: false,
+  saveUninitialized: false
+}))
 server.use(passport.initialize())
 server.use(passport.session())
 initializePassport(passport)
